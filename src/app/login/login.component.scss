@@ -1,0 +1,17 @@
+:host {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form {
+  > .row {
+    display: flex;
+    padding: 0.5rem;
+
+    > .label {
+      flex-basis: 100px;
+    }
+  }
+}

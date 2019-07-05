@@ -1,0 +1,12 @@
+<ul class="pokemon-list">
+  <li class="row" *ngFor="let pokemon of pokemons">
+    <div class="column -grow pokemon-info">
+      <div class="name">{{ pokemon.name }}</div>
+      <div class="cp">(CP{{ pokemon.cp }})</div>
+    </div>
+    <div class="column">
+      <button [routerLink]="['/detail', pokemon.id]">edit</button>
+      <button (click)="onClickRemovePokemon(pokemon)">delete</button>
+    </div>
+  </li>
+</ul>

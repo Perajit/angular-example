@@ -1,0 +1,24 @@
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-body {
+  flex: 1;
+  display: flex;
+
+  > .sidebar,
+  > .main {
+    height: 100%;
+    overflow: auto;
+  }
+
+  > .sidebar {
+    flex-basis: 200px;
+  }
+
+  > .main {
+    flex: 1;
+  }
+}

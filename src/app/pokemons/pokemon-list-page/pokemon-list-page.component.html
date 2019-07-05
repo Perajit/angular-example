@@ -1,0 +1,8 @@
+<h2 class="page-title">Your pokemons</h2>
+<app-pokemon-list
+  [pokemons]="pokemons$ | async"
+  (removePokemon)="onRemovePokemon($event.pokemon)"
+></app-pokemon-list>
+<div>
+  <a [routerLink]="['/detail', '']">Add new pokemon</a>
+</div>

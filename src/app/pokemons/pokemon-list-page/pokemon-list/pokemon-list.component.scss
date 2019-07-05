@@ -1,0 +1,28 @@
+.pokemon-list {
+  max-width: 500px;
+  padding: 1rem;
+
+  > .row {
+    display: flex;
+
+    > .column {
+      padding: 0.5rem 0.2rem;
+
+      &.-grow {
+        flex-grow: 1;
+      }
+    }
+
+    > .pokemon-info {
+      display: flex;
+
+      > .name {
+        margin-right: 0.3rem;
+      }
+
+      > .cp {
+        margin-right: 1rem;
+      }
+    }
+  }
+}
