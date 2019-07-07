@@ -24,7 +24,7 @@ export class PokemonService {
     this.pokemonsSubj.next(pokemons);
   }
 
-  loadPokemons() {
+  fetchPokemons() {
     return of([...mockPokemons]).pipe(
       delay(1000), // Simulate latency
       tap((pokemons: Pokemon[]) => {
@@ -33,9 +33,12 @@ export class PokemonService {
     );
   }
 
-  getPokemonById(id: number) {
-    const pokemons = this.pokemons || [];
-    return pokemons.find((pokemon) => pokemon.id === id);
+  loadPokemons() {
+    const pokemons = this.pokemons;
+
+    if (!pokemons) {
+      this.fetchPokemons().subscribe();
+    }
   }
 
   addPokemon(pokemonData: Partial<Pokemon>) {
@@ -44,8 +47,7 @@ export class PokemonService {
     const maxId = Math.max(...pokomonIds);
     const newPokemon = {
       ...pokemonData,
-      id: maxId + 1,
-      isCompleted: false
+      id: maxId + 1
     } as Pokemon;
 
     this.pokemons = pokemons.concat(newPokemon);
@@ -53,19 +55,31 @@ export class PokemonService {
 
   removePokemon(pokemon: Pokemon) {
     const pokemons = this.pokemons || [];
-    const index = pokemons.indexOf(pokemon);
+    const index = this.getIndexOfPokemon(pokemon, pokemons);
 
     this.pokemons = pokemons.slice(0, index).concat(pokemons.slice(index + 1));
   }
 
   updatePokemon(pokemon: Pokemon, modifier: Partial<Pokemon>) {
     const pokemons = this.pokemons || [];
-    const index = pokemons.indexOf(pokemon);
+    const index = this.getIndexOfPokemon(pokemon, pokemons);
     const updatedPokemon = { ...pokemon, ...modifier };
 
     this.pokemons = pokemons
       .slice(0, index)
       .concat(updatedPokemon)
       .concat(pokemons.slice(index + 1));
+  }
+
+  getPokemonById(id: number) {
+    const pokemons = this.pokemons || [];
+
+    return pokemons.find((pokemon) => pokemon.id === id);
+  }
+
+  private getIndexOfPokemon(pokemon: Pokemon, pokemons: Pokemon[]) {
+    const id = pokemon.id;
+
+    return pokemons.findIndex((p) => p.id === id);
   }
 }

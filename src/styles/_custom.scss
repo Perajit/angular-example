@@ -1,0 +1,26 @@
+@import 'colors';
+
+.primary-text {
+  color: $primary-text-color;
+}
+
+.secondary-text {
+  color: $secondary-text-color;
+}
+
+.message {
+  &.-error {
+    color: $error-color;
+  }
+}
+
+.card {
+  border-radius: 0.25em;
+  background-color: $primary-bg-color;
+  box-shadow: 0 0 1px rgba($divider-color, 0.8), -1px -1px 1px rgba($divider-color, 0.2), -1px 1px 1px rgba($divider-color, 0.2),
+    1px -1px 1px rgba($divider-color, 0.2), 1px 1px 1px rgba($divider-color, 0.2), 0 2px 6px rgba($divider-color, 0.4);
+}
+
+.section-title {
+  margin: 0;
+}

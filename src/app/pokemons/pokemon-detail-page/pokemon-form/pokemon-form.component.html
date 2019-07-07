@@ -1,42 +1,56 @@
-<form class="pokemon-form" [formGroup]="pokemonForm" (ngSubmit)="onSubmit()">
-  <div class="row">
-    <label class="label">Species:</label>
-    <input
-      id="species"
-      name="species"
-      formControlName="species"
-      class="input"
-      [ngClass]="{ '-error': hasError('species') }"
-    />
-    <div *ngIf="hasError('species')" class="message -error">{{ getErrorMessage('species') }}</div>
-  </div>
-  <div class="row">
-    <label class="label">Name:</label>
-    <input
-      id="name"
-      name="name"
-      formControlName="name"
-      class="input"
-      [ngClass]="{ '-error': hasError('name') }"
-    />
-    <div *ngIf="hasError('name')" class="message -error">{{ getErrorMessage('name') }}</div>
-  </div>
-  <div class="row">
-    <label class="label">CP:</label>
-    <input
-      id="cp"
-      name="cp"
-      formControlName="cp"
-      class="input"
-      type="number"
-      autocomplete="off"
-      appNumericInput
-      [ngClass]="{ '-error': hasError('cp') }"
-    />
-    <div *ngIf="hasError('cp')" class="message -error">{{ getErrorMessage('cp') }}</div>
-  </div>
-  <div class="row">
-    <button type="submit" class="submit-button" [disabled]="isFormInvalid">Save</button>
-    <button class="cancel-button" (click)="onCancel()">Cancel</button>
-  </div>
-</form>
+<div class="card">
+  <form class="pokemon-form" [formGroup]="pokemonForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <label class="label">Name:</label>
+      <div class="input-holder">
+        <input
+          id="name"
+          name="name"
+          formControlName="name"
+          class="input"
+          [ngClass]="{ '-error': hasError('name') }"
+        />
+        <div *ngIf="hasError('name')" class="message -error">{{ getErrorMessage('name') }}</div>
+      </div>
+    </div>
+    <div class="row">
+      <label class="label">Class:</label>
+      <div class="input-holder">
+        <select
+          id="class"
+          name="class"
+          formControlName="class"
+          class="input"
+          [ngClass]="{ '-error': hasError('class') }"
+        >
+          <option
+            *ngFor="let pokemonClass of pokemonClasses"
+            [value]="pokemonClass.name"
+          >
+            {{ pokemonClass.name }}
+          </option>
+        </select>
+        <div *ngIf="hasError('class')" class="message -error">{{ getErrorMessage('class') }}</div>
+      </div>
+    </div>
+    <div class="row">
+      <label class="label">CP:</label>
+      <div class="input-holder">
+        <input
+          id="cp"
+          name="cp"
+          formControlName="cp"
+          class="input"
+          type="number"
+          appNumericInput
+          [ngClass]="{ '-error': hasError('cp') }"
+        />
+        <div *ngIf="hasError('cp')" class="message -error">{{ getErrorMessage('cp') }}</div>
+      </div>
+    </div>
+    <div class="row tools">
+      <button type="submit" class="button -primary">Save</button>
+      <button class="button" (click)="onCancel()">Cancel</button>
+    </div>
+  </form>    
+</div>

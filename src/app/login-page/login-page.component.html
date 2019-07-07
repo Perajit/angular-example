@@ -1,0 +1,38 @@
+<div class="content-holder">
+  <h1 class="title">Angular Example</h1>
+  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <label class="label">Username:</label>
+      <div class="input-holder">
+        <input
+          id="username"
+          name="username"
+          placeholder="Username"
+          formControlName="username"
+          class="input"
+          [ngClass]="{ '-error': hasError('username') }"
+        />
+        <div *ngIf="hasError('username')" class="message -error">{{ getErrorMessage('username') }}</div>
+      </div>
+    </div>
+    <div class="row">
+      <label class="label">Password:</label>
+      <div class="input-holder">
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Password"
+          formControlName="password"
+          autocomplete="on"
+          class="input"
+          [ngClass]="{ '-error': hasError('password') }"
+        />
+        <div *ngIf="hasError('password')" class="message -error">{{ getErrorMessage('password') }}</div>
+      </div>
+    </div>
+    <div class="row tools">
+      <button type="submit" class="submit-button button -large -primary">Login</button>
+    </div>
+  </form>
+</div>

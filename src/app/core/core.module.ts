@@ -6,12 +6,10 @@ import { RouterModule } from '@angular/router';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { HeaderComponent } from './header/header.component';
 import { HeaderUserMenuComponent } from './header/header-user-menu/header-user-menu.component';
-import { FooterComponent } from './footer/footer.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   imports: [BrowserModule, RouterModule],
-  exports: [HttpClientModule, HeaderComponent, FooterComponent, SidebarComponent],
+  exports: [HttpClientModule, HeaderComponent],
   providers: [
     {
       provide: 'Window',
@@ -23,6 +21,6 @@ import { SidebarComponent } from './sidebar/sidebar.component';
       multi: true
     }
   ],
-  declarations: [HeaderComponent, HeaderUserMenuComponent, FooterComponent, SidebarComponent]
+  declarations: [HeaderComponent, HeaderUserMenuComponent]
 })
 export class CoreModule {}

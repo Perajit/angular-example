@@ -4,25 +4,25 @@ export default [
   {
     id: 1,
     name: 'Pickachoux',
-    species: 'Pikachu',
+    class: 'Pikachu',
     cp: 650
   },
   {
     id: 2,
     name: 'EV',
-    species: 'Eevee',
+    class: 'Eevee',
     cp: 400
   },
   {
     id: 3,
     name: 'Miumiu',
-    species: 'Mewtwo',
+    class: 'Mewtwo',
     cp: 4000
   },
   {
     id: 4,
     name: 'Barbgon',
-    species: 'Dragonite',
+    class: 'Dragonite',
     cp: 3700
   }
 ] as Pokemon[];

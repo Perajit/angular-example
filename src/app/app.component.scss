@@ -1,7 +1,12 @@
+@import 'colors';
+
+$default-bg-color: $secondary-bg-color;
+
 :host {
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: $default-bg-color;
 }
 
 .app-body {
@@ -20,5 +25,11 @@
 
   > .main {
     flex: 1;
+    max-width: 600px;
+    margin: auto;
+
+    &.-fullwidth {
+      max-width: 100%;
+    }
   }
 }

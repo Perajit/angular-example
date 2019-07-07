@@ -2,8 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Pokemon } from '../../../core/pokemons/pokemon.model';
+import { PokemonClass } from '../../../core/pokemons/pokemon-class.model';
 
-export type PokemonField = 'name' | 'species' | 'cp';
+export type PokemonField = 'name' | 'class' | 'cp';
 export type PokemonFieldError = Record<PokemonField, string>;
 
 @Component({
@@ -13,11 +14,11 @@ export type PokemonFieldError = Record<PokemonField, string>;
 })
 export class PokemonFormComponent implements OnInit {
   @Input() pokemon: Pokemon;
+  @Input() pokemonClasses: PokemonClass[];
   @Output() savePokemon: EventEmitter<any> = new EventEmitter();
   @Output() cancel: EventEmitter<any> = new EventEmitter();
 
   pokemonForm: FormGroup;
-  errors: PokemonFieldError = {} as PokemonFieldError;
 
   constructor(private formBuilder: FormBuilder) {}
 
@@ -37,20 +38,15 @@ export class PokemonFormComponent implements OnInit {
     const pokemonData = this.pokemonData;
 
     this.pokemonForm = this.formBuilder.group({
-      species: [pokemonData.cp, [Validators.required, Validators.maxLength(50)]],
       name: [pokemonData.name, [Validators.required, Validators.maxLength(50)]],
-      cp: [pokemonData.cp, [Validators.required, Validators.min(1), Validators.max(10)]]
+      class: [pokemonData.class, [Validators.required, Validators.maxLength(50)]],
+      cp: [pokemonData.cp, [Validators.required, Validators.min(10)]]
     });
   }
 
   onSubmit() {
     if (this.isFormInvalid) {
-      this.errors = {
-        species: this.getErrorMessage('species'),
-        name: this.getErrorMessage('name'),
-        cp: this.getErrorMessage('cp')
-      } as PokemonFieldError;
-
+      this.markAllFieldAsDirty();
       return;
     }
 
@@ -102,5 +98,14 @@ export class PokemonFormComponent implements OnInit {
     const formData = form.value;
 
     return { ...formData };
+  }
+
+  private markAllFieldAsDirty() {
+    const formControls = this.formControls;
+    const fieldNames = Object.keys(formControls);
+
+    fieldNames.forEach((fieldName) => {
+      formControls[fieldName].markAsDirty();
+    });
   }
 }
