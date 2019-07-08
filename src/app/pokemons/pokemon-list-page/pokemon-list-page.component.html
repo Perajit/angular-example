@@ -1,8 +1,10 @@
-<h2 class="page-title">Your pokemons</h2>
+<h2 class="section-title">Your pokemons</h2>
 <app-pokemon-list
   [pokemons]="pokemons$ | async"
+  [pokemonClasses]="pokemonClasses$ | async"
+  (editPokemon)="onEditPokemon($event.pokemon)"
   (removePokemon)="onRemovePokemon($event.pokemon)"
 ></app-pokemon-list>
-<div>
-  <a [routerLink]="['/detail', '']">Add new pokemon</a>
+<div class="section-footer">
+  <a [routerLink]="['/pokemons/new']">Add new pokemon</a>
 </div>

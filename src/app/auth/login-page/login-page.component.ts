@@ -2,14 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AuthService } from '../core/auth/auth.service';
+import { AuthService } from '../../core/auth/auth.service';
+
+export type LoginField = 'username' | 'password';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'app-login-page',
+  templateUrl: './login-page.component.html',
+  styleUrls: ['./login-page.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginPageComponent implements OnInit {
   loginForm: FormGroup;
 
   private nextUrl: string;
@@ -41,6 +43,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.isFormInvalid) {
+      this.markAllFieldAsDirty();
       return;
     }
 
@@ -52,5 +55,37 @@ export class LoginComponent implements OnInit {
 
   navigateToReturnUrl() {
     this.router.navigate([`/${this.nextUrl}`]);
+  }
+
+  hasError(fieldName: LoginField) {
+    const control = this.formControls[fieldName];
+
+    if (!control) {
+      return;
+    }
+
+    return control.dirty && control.invalid;
+  }
+
+  getErrorMessage(fieldName: LoginField) {
+    const control = this.formControls[fieldName];
+    const errors = control ? control.errors : null;
+
+    if (!errors) {
+      return;
+    }
+
+    if (errors.required) {
+      return `This field is required`;
+    }
+  }
+
+  private markAllFieldAsDirty() {
+    const formControls = this.formControls;
+    const fieldNames = Object.keys(formControls);
+
+    fieldNames.forEach((fieldName) => {
+      formControls[fieldName].markAsDirty();
+    });
   }
 }

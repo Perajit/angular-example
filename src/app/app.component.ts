@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-export type RouteConfigKey = 'hideHeader' | 'hideFooter' | 'hideSidebar';
+export type RouteConfigKey = 'hideHeader' | 'fullWidth';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +12,7 @@ export class AppComponent {
   readonly title = 'angular-example';
   readonly routeConfigs = {
     hideHeader: ['login'],
-    hideFooter: ['login'],
-    hideSidebar: ['login']
+    fullWidth: ['login']
   } as Record<RouteConfigKey, string[]>;
 
   constructor(private router: Router) {}
@@ -22,12 +21,8 @@ export class AppComponent {
     return !this.hasRouteConfig('hideHeader');
   }
 
-  get shouldShowFooter() {
-    return !this.hasRouteConfig('hideFooter');
-  }
-
-  get shouldShowSidebar() {
-    return !this.hasRouteConfig('hideSidebar');
+  get shouldSpanFullWidth() {
+    return !!this.hasRouteConfig('fullWidth');
   }
 
   private hasRouteConfig(configKey: RouteConfigKey) {

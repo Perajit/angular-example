@@ -1,0 +1,15 @@
+@import 'colors';
+
+$input-border-color: $divider-color;
+
+.input {
+  outline: none;
+  height: 2rem;
+  box-sizing: border-box;
+  padding: 0 0.5rem;
+  border: solid 1px $input-border-color;
+
+  &.-error {
+    border-color: $error-color;
+  }
+}

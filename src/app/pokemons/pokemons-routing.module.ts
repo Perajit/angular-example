@@ -18,6 +18,10 @@ const routes: Routes = [
         component: PokemonDetailPageComponent
       },
       {
+        path: 'new',
+        component: PokemonDetailPageComponent
+      },
+      {
         path: '',
         redirectTo: 'list',
         pathMatch: 'full'

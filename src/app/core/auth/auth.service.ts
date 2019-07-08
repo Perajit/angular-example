@@ -1,19 +1,22 @@
 import { Injectable, Inject } from '@angular/core';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { delay, tap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { User } from './user.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   currentUser$: Observable<User>;
+  readonly authApiUrl = `${environment.apiUrl}/auth`;
+  readonly userStorageKey = 'ngexample_user';
 
   private currentUserSubj: BehaviorSubject<User> = new BehaviorSubject(null);
-  private readonly userStorageKey = 'ngexample_user';
 
-  constructor(@Inject('Window') private window: Window) {
+  constructor(private http: HttpClient, @Inject('Window') private window: Window) {
     this.currentUser$ = this.currentUserSubj.asObservable();
     this.currentUser = this.getStoredUser();
   }
@@ -28,7 +31,8 @@ export class AuthService {
   }
 
   get currentUserToken() {
-    return this.currentUser.token;
+    const currentUser = this.currentUser || ({} as User);
+    return currentUser.token;
   }
 
   isLoggedIn(): boolean {
@@ -36,26 +40,28 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<User> {
-    // FIXME: Replace with implementation
-    const fakeUser: User = {
-      token: 'fake-token',
-      username,
-      profile: {
-        firstname: 'Pikachu',
-        lastname: 'Mewtwo'
-      }
+    const reqUrl = `${this.authApiUrl}/login`;
+    const reqBody = { username, password };
+    const reqOptions = {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
     };
 
-    return of(fakeUser).pipe(
-      delay(1000), // Simulate latency
-      tap((user) => {
+    return this.http.post(reqUrl, reqBody, reqOptions).pipe(
+      tap((user: User) => {
         this.currentUser = user;
       })
     );
   }
 
   logout() {
-    this.currentUser = null;
+    const reqUrl = `${this.authApiUrl}/logout`;
+    const reqBody = null;
+
+    return this.http.post(reqUrl, reqBody).pipe(
+      tap(() => {
+        this.currentUser = null;
+      })
+    );
   }
 
   private getStoredUser() {

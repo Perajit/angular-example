@@ -1,28 +1,55 @@
+@import 'colors';
+
+$list-bg-color: $primary-bg-color;
+$list-divider-color: rgba($divider-color, 0.5);
+
 .pokemon-list {
-  max-width: 500px;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
 
   > .row {
     display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    border-top: solid 1px $list-divider-color;
+
+    &:first-of-type {
+      border-top-color: transparent;
+    }
 
     > .column {
-      padding: 0.5rem 0.2rem;
+      padding: 0.5rem;
 
       &.-grow {
         flex-grow: 1;
       }
-    }
 
-    > .pokemon-info {
-      display: flex;
-
-      > .name {
-        margin-right: 0.3rem;
-      }
-
-      > .cp {
-        margin-right: 1rem;
+      > .button {
+        + .button {
+          margin-left: 0.5rem;
+        }
       }
     }
+
+    > .icon-holder {
+      .icon {
+        border-radius: 100%;
+        width: 3.5rem;
+        height: 3rem;
+      }
+    }
+
+    > .info-holder {
+      > .secondary-text {
+        font-size: 0.8em;
+      }
+    }
+
+    > .tool-column {
+      text-align: right;
+    }
+  }
+
+  > .placeholder {
+    text-align: center;
   }
 }

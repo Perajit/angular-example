@@ -1,6 +1,7 @@
-<h2 class="page-title">Pokemon detail</h2>
+<h2 class="section-title">Pokemon detail</h2>
 <app-pokemon-form
   [pokemon]="pokemon"
-  (savePokemon)="onSavePokemon($event.pokemon)"
+  [pokemonClasses]="pokemonClasses$ | async"
+  (savePokemon)="onSavePokemon($event.data)"
   (cancel)="onCancel()"
 ></app-pokemon-form>

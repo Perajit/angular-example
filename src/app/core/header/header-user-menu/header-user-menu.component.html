@@ -1,7 +1,4 @@
-<ng-container *ngIf="!currentUser">
-  <a class="link" [routerLink]="['/login']">Login</a>
-</ng-container>
 <ng-container *ngIf="currentUser">
-  <span class="greeting">Welcome {{ currentUser?.username }}</span>
-  <a class="link" [routerLink]="['/login']" (click)="onClickLogout()">Logout</a>
+  <span class="secondary-text">Welcome {{ currentUser?.username }}</span>
+  <a class="link" (click)="onClickLogout()">Logout</a>
 </ng-container>

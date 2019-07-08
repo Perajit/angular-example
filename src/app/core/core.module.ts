@@ -4,14 +4,16 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { MockAuthInterceptor } from './auth/mock/mock-auth.interceptor';
+import { MockPokemonInterceptor } from './pokemons/mock/mock-pokemon.interceptor';
+import { MockPokemonMasterdataInterceptor } from './pokemons/mock/mock-pokemon-masterdata.interceptor';
 import { HeaderComponent } from './header/header.component';
 import { HeaderUserMenuComponent } from './header/header-user-menu/header-user-menu.component';
-import { FooterComponent } from './footer/footer.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   imports: [BrowserModule, RouterModule],
-  exports: [HttpClientModule, HeaderComponent, FooterComponent, SidebarComponent],
+  exports: [HttpClientModule, HeaderComponent],
+  declarations: [HeaderComponent, HeaderUserMenuComponent],
   providers: [
     {
       provide: 'Window',
@@ -21,8 +23,22 @@ import { SidebarComponent } from './sidebar/sidebar.component';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MockAuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MockPokemonInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MockPokemonMasterdataInterceptor,
+      multi: true
     }
-  ],
-  declarations: [HeaderComponent, HeaderUserMenuComponent, FooterComponent, SidebarComponent]
+  ]
 })
 export class CoreModule {}

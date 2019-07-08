@@ -1,5 +1,8 @@
 <app-header *ngIf="shouldShowHeader"></app-header>
 <div class="app-body">
-  <div class="main"><router-outlet></router-outlet></div>
+  <div class="main">
+    <div class="page-wrapper" [ngClass]="{ '-fullwidth': shouldSpanFullWidth }">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </div>
-<app-footer *ngIf="shouldShowFooter"></app-footer>

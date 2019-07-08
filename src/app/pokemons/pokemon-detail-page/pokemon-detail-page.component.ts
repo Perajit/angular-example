@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { Observable } from 'rxjs';
 
 import { PokemonService } from '../../core/pokemons/pokemon.service';
+import { PokemonMasterdataService } from '../../core/pokemons/pokemon-masterdata.service';
 import { Pokemon } from '../../core/pokemons/pokemon.model';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-pokemon-detail-page',
@@ -13,7 +15,16 @@ import { Location } from '@angular/common';
 export class PokemonDetailPageComponent implements OnInit {
   pokemon: Pokemon;
 
-  constructor(private route: ActivatedRoute, private location: Location, private pokemonService: PokemonService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private location: Location,
+    private pokemonService: PokemonService,
+    private pokemonMasterDataService: PokemonMasterdataService
+  ) {}
+
+  get pokemonClasses$() {
+    return this.pokemonMasterDataService.pokemonClasses$;
+  }
 
   ngOnInit() {
     const pokemonId = this.route.snapshot.params.id;
@@ -21,16 +32,22 @@ export class PokemonDetailPageComponent implements OnInit {
     if (pokemonId) {
       this.pokemon = this.pokemonService.getPokemonById(Number(pokemonId));
     }
+
+    this.pokemonMasterDataService.loadPokemonClasses();
   }
 
-  onSavePokemon(pokemonData: Partial<Pokemon>) {
+  onSavePokemon(data: Partial<Pokemon>) {
+    let req$: Observable<any>;
+
     if (this.pokemon) {
-      this.pokemonService.updatePokemon(this.pokemon, pokemonData);
+      req$ = this.pokemonService.updatePokemon(this.pokemon, data);
     } else {
-      this.pokemonService.addPokemon(pokemonData);
+      req$ = this.pokemonService.addPokemon(data);
     }
 
-    this.navigateBack();
+    req$.subscribe(() => {
+      this.navigateBack();
+    });
   }
 
   onCancel() {
