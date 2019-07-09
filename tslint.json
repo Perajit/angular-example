@@ -57,7 +57,20 @@
     "typedef": [true, "parameter"],
     "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
-    "whitespace": [true, "check-branch", "check-decl", "check-module", "check-operator", "check-preblock", "check-separator", "check-type"]
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-module",
+      "check-operator",
+      "check-preblock",
+      "check-postbrace",
+      "check-rest-spread",
+      "check-separator",
+      "check-type",
+      "check-typecast",
+      "check-type-operator"
+    ]
   },
   "rulesDirectory": ["codelyzer"]
 }
