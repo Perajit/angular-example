@@ -1,0 +1,14 @@
+@mixin font-pokemon($text-color, $stroke-color: '') {
+  font-family: Pokemon;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  line-height: 1.5em;
+  color: $text-color;
+  transform: translateY(-0.3rem);
+
+  @if $stroke-color {
+    -webkit-text-stroke: 1px $stroke-color;
+    text-shadow: 3px 3px $stroke-color, -2px -2px $stroke-color, -2px 2px $stroke-color, 2px -2px $stroke-color, 2px 2px $stroke-color,
+      -1px -1px $stroke-color, -1px 1px $stroke-color, 1px -1px $stroke-color, 1px 1px $stroke-color;
+  }
+}

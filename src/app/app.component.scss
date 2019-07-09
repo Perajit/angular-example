@@ -1,7 +1,12 @@
+@import 'colors';
+
+$app-bg-color: $secondary-bg-color;
+
 :host {
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: $app-bg-color;
 }
 
 .app-body {

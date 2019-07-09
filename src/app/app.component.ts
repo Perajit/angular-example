@@ -15,7 +15,9 @@ export class AppComponent {
     fullWidth: ['login']
   } as Record<RouteConfigKey, string[]>;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router
+  ) { }
 
   get shouldShowHeader() {
     return !this.hasRouteConfig('hideHeader');

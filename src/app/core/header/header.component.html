@@ -1,1 +1,4 @@
-<p>header works!</p>
+<header class="app-header">
+  <div class="title">Angular Example</div>
+  <app-header-user-menu [currentUser]="currentUser$ | async" (logout)="onLogout()"></app-header-user-menu>
+</header>

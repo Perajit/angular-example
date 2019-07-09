@@ -1,0 +1,53 @@
+@import 'colors';
+@import 'mixins';
+
+$image-path: '/assets/images';
+$background-url-1: '#{$image-path}/pokeball.png';
+$background-url-2: '#{$image-path}/pikachu.png';
+$title-text-color: $accent-color;
+$title-stroke-color: $dark-primary-color;
+
+:host {
+  height: 100%;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url(#{$background-url-1}), url(#{$background-url-2});
+  background-repeat: no-repeat;
+  background-position: 10% 10%, 120% 95%;
+  background-size: 25%, 45%;
+}
+
+.content-holder {
+  width: 400px;
+
+  > .title {
+    @include font-pokemon($title-text-color, $title-stroke-color);
+    margin-bottom: 2rem;
+  }
+
+  > .login-form {
+    > .row {
+      display: flex;
+      flex-wrap: wrap;
+      box-sizing: border-box;
+      height: 60px;
+      padding: 0.5rem 0;
+
+      > .label {
+        flex-basis: 150px;
+      }
+
+      > .input-holder {
+        flex: 1;
+      }
+
+      .input,
+      .submit-button {
+        width: 100%;
+        min-width: 200px;
+      }
+    }
+  }
+}
