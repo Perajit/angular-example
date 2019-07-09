@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+export type RouteConfigKey = 'hideHeader' | 'fullWidth';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,33 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'angular-example';
+  readonly title = 'angular-example';
+  readonly routeConfigs = {
+    hideHeader: ['login'],
+    fullWidth: ['login']
+  } as Record<RouteConfigKey, string[]>;
+
+  constructor(private router: Router) {}
+
+  get shouldShowHeader() {
+    return !this.hasRouteConfig('hideHeader');
+  }
+
+  get shouldSpanFullWidth() {
+    return !!this.hasRouteConfig('fullWidth');
+  }
+
+  private hasRouteConfig(configKey: RouteConfigKey) {
+    const routes = this.routeConfigs[configKey];
+    const rootPath = this.getRootPath();
+
+    return routes.includes(rootPath);
+  }
+
+  private getRootPath() {
+    const url = this.router.url;
+    const rootUrl = url.split('/')[1];
+
+    return rootUrl ? rootUrl.split('?')[0] : '';
+  }
 }
