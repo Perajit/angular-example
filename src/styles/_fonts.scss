@@ -1,0 +1,11 @@
+$font-path: '/assets/fonts';
+
+@font-face {
+  font-family: Pokemon;
+  src: url('#{$font-path}/Pokemon.ttf');
+}
+
+@font-face {
+  font-family: YellowPeas;
+  src: url('#{$font-path}/YellowPeas.otf');
+}
