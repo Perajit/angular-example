@@ -4,11 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { NumericInputDirective } from './numeric-input.directive';
-import { PokeballSpinnerComponent } from './pokeball-spinner/pokeball-spinner.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
-  exports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, NumericInputDirective, PokeballSpinnerComponent],
-  declarations: [NumericInputDirective, PokeballSpinnerComponent]
+  exports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, NumericInputDirective],
+  declarations: [NumericInputDirective]
 })
 export class SharedModule {}

@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Observable } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-pokeball-spinner',
@@ -6,24 +8,18 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./pokeball-spinner.component.scss']
 })
 export class PokeballSpinnerComponent implements OnInit {
-  @Input() size: number;
+  @Input() isLoading$: Observable<boolean>;
+  @Input() size = 80;
   @Input() color: string;
 
   constructor() {}
 
-  get holderStyle() {
-    const sizeText = `${this.size}px`;
-
-    return {
-      width: sizeText,
-      height: sizeText
-    };
+  get styleSize() {
+    return `${this.size}px`;
   }
 
-  get innerStyle() {
-    return {
-      borderWidth: `${this.size / 20}px`
-    };
+  get dividerWidth() {
+    return `${this.size / 16}px`;
   }
 
   ngOnInit() {}

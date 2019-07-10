@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoadingService } from './core/loading/loading.service';
 
 export type RouteConfigKey = 'hideHeader' | 'fullWidth';
 
@@ -15,7 +16,10 @@ export class AppComponent {
     fullWidth: ['login']
   } as Record<RouteConfigKey, string[]>;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private loadingService: LoadingService
+  ) { }
 
   get shouldShowHeader() {
     return !this.hasRouteConfig('hideHeader');
@@ -23,6 +27,10 @@ export class AppComponent {
 
   get shouldSpanFullWidth() {
     return !!this.hasRouteConfig('fullWidth');
+  }
+
+  get shouldShowLoading$() {
+    return this.loadingService.isLoading$;
   }
 
   private hasRouteConfig(configKey: RouteConfigKey) {
