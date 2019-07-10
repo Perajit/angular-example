@@ -1,1 +1,7 @@
-<p>pokemon-detail-page works!</p>
+<h2 class="section-title">Pokemon detail</h2>
+<app-pokemon-form
+  [pokemon]="pokemon"
+  [pokemonClasses]="pokemonClasses$ | async"
+  (savePokemon)="onSavePokemon($event.data)"
+  (cancel)="onCancel()"
+></app-pokemon-form>

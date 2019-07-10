@@ -1,1 +1,10 @@
-<p>pokemon-list-page works!</p>
+<h2 class="section-title">Your pokemons</h2>
+<app-pokemon-list
+  [pokemons]="pokemons$ | async"
+  [pokemonClasses]="pokemonClasses$ | async"
+  (editPokemon)="onEditPokemon($event.pokemon)"
+  (removePokemon)="onRemovePokemon($event.pokemon)"
+></app-pokemon-list>
+<div class="section-footer">
+  <a [routerLink]="['/pokemons/new']">Add new pokemon</a>
+</div>

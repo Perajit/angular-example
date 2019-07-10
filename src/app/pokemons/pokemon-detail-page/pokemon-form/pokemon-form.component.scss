@@ -1,0 +1,41 @@
+@import 'colors';
+
+.pokemon-form {
+  padding: 1em;
+  margin: 1em auto;
+  border-radius: inherit;
+
+  > .row {
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 0.4em 0.5rem;
+
+    > .label {
+      flex-basis: 100px;
+    }
+
+    > .input-holder {
+      > .input {
+        width: 400px;
+
+        &.-error {
+          border-color: $error-color;
+        }
+      }
+    }
+  }
+
+  > .tools {
+    display: flex;
+    margin-top: 1rem;
+
+    > .button {
+      flex: 1;
+
+      + .button {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+}
