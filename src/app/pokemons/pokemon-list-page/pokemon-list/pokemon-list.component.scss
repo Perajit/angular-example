@@ -4,52 +4,41 @@ $list-bg-color: $primary-bg-color;
 $list-divider-color: rgba($divider-color, 0.5);
 
 .pokemon-list {
-  padding: 0.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
 
-  > .row {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    border-top: solid 1px $list-divider-color;
+  > .item {
+    flex: 1;
+    min-width: 210px;
+    padding: 0.5rem;
+    box-sizing: border-box;
 
-    &:first-of-type {
-      border-top-color: transparent;
-    }
+    > .card {
+      padding: 0.5rem 0;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: right center;
 
-    > .column {
-      padding: 0.5rem;
+      > .info-holder {
+        padding: 0 1rem;
 
-      &.-grow {
-        flex-grow: 1;
+        > .secondary-text {
+          font-size: 0.9rem;
+        }
       }
 
-      > .button {
-        + .button {
-          margin-left: 0.5rem;
+      > .tools-holder {
+        padding: 0 1rem;
+
+        > .button {
+          padding-left: 0;
+          padding-right: 0;
+
+          + .button {
+            margin-left: 1rem;
+          }
         }
       }
     }
-
-    > .icon-holder {
-      .icon {
-        border-radius: 100%;
-        width: 3.5rem;
-        height: 3rem;
-      }
-    }
-
-    > .info-holder {
-      > .secondary-text {
-        font-size: 0.8em;
-      }
-    }
-
-    > .tool-column {
-      text-align: right;
-    }
-  }
-
-  > .placeholder {
-    text-align: center;
   }
 }

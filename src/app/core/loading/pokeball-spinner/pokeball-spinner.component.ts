@@ -14,7 +14,7 @@ export class PokeballSpinnerComponent implements OnInit {
 
   constructor() {}
 
-  get styleSize() {
+  get styleWithUnit() {
     return `${this.size}px`;
   }
 

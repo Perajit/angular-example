@@ -32,7 +32,12 @@ export class PokemonListComponent implements OnInit {
     this.removePokemon.emit({ pokemon });
   }
 
-  getPokemonIcon(pokemon: Pokemon) {
+  getItemBackgroundImageStyle(pokemon: Pokemon) {
+    const icon = this.getPokemonIcon(pokemon);
+    return `url(${icon})`;
+  }
+
+  private getPokemonIcon(pokemon: Pokemon) {
     const className = pokemon.class;
     const pokemonClasses = this.pokemonClasses || [];
     const pokemonClass = pokemonClasses.find((p) => p.name === className);
