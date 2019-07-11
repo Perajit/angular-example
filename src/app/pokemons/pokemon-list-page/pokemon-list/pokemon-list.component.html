@@ -1,15 +1,15 @@
-<ul class="pokemon-list card">
-  <li class="row" *ngFor="let pokemon of pokemons">
-    <div class="column icon-holder">
-      <img [src]="getPokemonIcon(pokemon)" alt="" class="icon"/>
-    </div>
-    <div class="column -grow info-holder">
-      <div class="primary-text">{{ pokemon.name }}</div>
-      <div class="secondary-text">{{ pokemon.class }} CP{{ pokemon.cp }}</div>
-    </div>
-    <div class="column tool-column">
-      <button (click)="onClickEditPokemon(pokemon)" class="button -transparent">Edit</button>
-      <button (click)="onClickRemovePokemon(pokemon)" class="button -transparent">Delete</button>
+<ul class="pokemon-list">
+  <li class="item" *ngFor="let pokemon of pokemons">
+    <div class="card" [ngStyle]="{ backgroundImage: getItemBackgroundImageStyle(pokemon) }">
+      <div class="info-holder">
+        <div class="primary-text">{{ pokemon.name }}</div>
+        <div class="secondary-text">{{ pokemon.class }}</div>
+        <div class="secondary-text">CP{{ pokemon.cp }}</div>
+      </div>
+      <div class="tools-holder">
+        <button (click)="onClickEditPokemon(pokemon)" class="button -transparent">Edit</button>
+        <button (click)="onClickRemovePokemon(pokemon)" class="button -transparent">Delete</button>
+      </div>
     </div>
   </li>
   <li *ngIf="shouldShowPlaceholder" class="placeholder">You have no pokemon.</li>

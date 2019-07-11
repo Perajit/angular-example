@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Pokemon } from 'src/app/core/pokemons/pokemon.model';
-import { PokemonClass } from 'src/app/core/pokemons/pokemon-class.model';
+import { Pokemon } from '../../../core/pokemons/pokemon.model';
+import { PokemonClass } from '../../../core/pokemons/pokemon-class.model';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -22,8 +22,7 @@ export class PokemonListComponent implements OnInit {
     return pokemons && !pokemons.length;
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   onClickEditPokemon(pokemon: Pokemon) {
     this.editPokemon.emit({ pokemon });
@@ -33,7 +32,12 @@ export class PokemonListComponent implements OnInit {
     this.removePokemon.emit({ pokemon });
   }
 
-  getPokemonIcon(pokemon: Pokemon) {
+  getItemBackgroundImageStyle(pokemon: Pokemon) {
+    const icon = this.getPokemonIcon(pokemon);
+    return `url(${icon})`;
+  }
+
+  private getPokemonIcon(pokemon: Pokemon) {
     const className = pokemon.class;
     const pokemonClasses = this.pokemonClasses || [];
     const pokemonClass = pokemonClasses.find((p) => p.name === className);
