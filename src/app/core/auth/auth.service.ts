@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, BehaviorSubject, of } from 'rxjs';
+import { tap, finalize, catchError } from 'rxjs/operators';
 
 import { User } from './user.model';
 import { environment } from 'src/environments/environment';
@@ -61,7 +61,8 @@ export class AuthService {
     const reqBody = null;
 
     return this.http.post(reqUrl, reqBody).pipe(
-      tap(() => {
+      catchError((e) => of(e)),
+      finalize(() => {
         this.currentUser = null;
       })
     );

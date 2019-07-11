@@ -38,7 +38,9 @@ export class MockPokemonInterceptor implements HttpInterceptor {
   }
 
   private interceptGetPokemons() {
-    return of(new HttpResponse({ status: 200, body: this.pokemons })).pipe(delay(500));
+    return of(new HttpResponse({ status: 200, body: this.pokemons })).pipe(
+      delay(1000)
+    );
   }
 
   private interceptAddPokemon(reqBody: Partial<Pokemon>) {
@@ -52,7 +54,9 @@ export class MockPokemonInterceptor implements HttpInterceptor {
 
     this.pokemons = pokemons.concat(newPokemon);
 
-    return of(new HttpResponse({ status: 200, body: reqBody }));
+    return of(new HttpResponse({ status: 200, body: reqBody })).pipe(
+      delay(1000)
+    );
   }
 
   private interceptUpdatePokemon(id: number, reqBody: Partial<Pokemon>) {
@@ -66,7 +70,9 @@ export class MockPokemonInterceptor implements HttpInterceptor {
       .concat(updatedPokemon)
       .concat(pokemons.slice(index + 1));
 
-    return of(new HttpResponse({ status: 200 }));
+    return of(new HttpResponse({ status: 200 })).pipe(
+      delay(1000)
+    );
   }
 
   private interceptRemovePokemon(id: number) {
@@ -75,7 +81,9 @@ export class MockPokemonInterceptor implements HttpInterceptor {
 
     this.pokemons = pokemons.slice(0, index).concat(pokemons.slice(index + 1));
 
-    return of(new HttpResponse({ status: 200 }));
+    return of(new HttpResponse({ status: 200 })).pipe(
+      delay(1000)
+    );
   }
 
   private getIndexOfPokemon(id: number) {

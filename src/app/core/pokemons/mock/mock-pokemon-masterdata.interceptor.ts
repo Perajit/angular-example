@@ -20,6 +20,8 @@ export class MockPokemonMasterdataInterceptor implements HttpInterceptor {
   }
 
   private interceptGetPokemonClasses() {
-    return of(new HttpResponse({ status: 200, body: [...mockPokemonClasses] })).pipe(delay(1000));
+    return of(new HttpResponse({ status: 200, body: [...mockPokemonClasses] })).pipe(
+      delay(1000)
+    );
   }
 }
