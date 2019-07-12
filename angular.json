@@ -31,6 +31,14 @@
             "scripts": []
           },
           "configurations": {
+            "mock": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/app-providers.ts",
+                  "with": "src/app/app-providers.mock.ts"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -63,6 +71,9 @@
             "browserTarget": "angular-example:build"
           },
           "configurations": {
+            "mock": {
+              "browserTarget": "angular-example:build:mock"
+            },
             "production": {
               "browserTarget": "angular-example:build:production"
             }

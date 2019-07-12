@@ -8,7 +8,9 @@
 
   @if $stroke-color {
     -webkit-text-stroke: 1px $stroke-color;
-    text-shadow: 3px 3px $stroke-color, -2px -2px $stroke-color, -2px 2px $stroke-color, 2px -2px $stroke-color, 2px 2px $stroke-color,
-      -1px -1px $stroke-color, -1px 1px $stroke-color, 1px -1px $stroke-color, 1px 1px $stroke-color;
+    text-shadow: 3px 3px $stroke-color, -2px -1px $stroke-color, -2px 1px $stroke-color, 2px -1px $stroke-color, 2px 1px $stroke-color,
+      -1px -2px $stroke-color, -1px 2px $stroke-color, 1px -2px $stroke-color, 1px 2px $stroke-color, -2px -2px $stroke-color,
+      -2px 2px $stroke-color, 2px -2px $stroke-color, 2px 2px $stroke-color, -1px -1px $stroke-color, -1px 1px $stroke-color,
+      1px -1px $stroke-color, 1px 1px $stroke-color;
   }
 }

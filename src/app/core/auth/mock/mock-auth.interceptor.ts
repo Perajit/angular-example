@@ -5,9 +5,7 @@ import { delay } from 'rxjs/operators';
 
 import { User } from '../user.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class MockAuthInterceptor implements HttpInterceptor {
   constructor() {}
 

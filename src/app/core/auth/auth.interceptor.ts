@@ -3,9 +3,7 @@ import { HttpRequest, HttpHandler, HttpInterceptor } from '@angular/common/http'
 
 import { AuthService } from './auth.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 

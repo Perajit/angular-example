@@ -5,9 +5,7 @@ import { delay } from 'rxjs/operators';
 
 import mockPokemonClasses from './mock-pokemon-classes';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class MockPokemonMasterdataInterceptor implements HttpInterceptor {
   constructor() {}
 
