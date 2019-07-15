@@ -9,7 +9,7 @@ $list-divider-color: rgba($divider-color, 0.5);
 
   > .item {
     flex: 1;
-    min-width: 210px;
+    min-width: 250px;
     padding: 0.5rem;
     box-sizing: border-box;
 
@@ -21,10 +21,6 @@ $list-divider-color: rgba($divider-color, 0.5);
 
       > .info-holder {
         padding: 0 1rem;
-
-        > .primary-text {
-          font-weight: 600;
-        }
 
         > .secondary-text {
           font-size: 0.9rem;
