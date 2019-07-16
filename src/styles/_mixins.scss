@@ -1,4 +1,4 @@
-@mixin font-pokemon($text-color, $stroke-color: '') {
+@mixin font-pokemon($text-color, $stroke-color, $stroke-width: 2) {
   font-family: Pokemon;
   font-weight: 400;
   letter-spacing: 0.2em;
@@ -6,9 +6,19 @@
   color: $text-color;
   transform: translateY(-0.3rem);
 
-  @if $stroke-color {
+  @if $stroke-width {
+    $text-shadow: #{$stroke-width}px #{$stroke-width}px #{$stroke-color};
+
+    @for $i from $stroke-width - 1 through 1 {
+      $text-shadow: -#{$i}px -#{$i}px #{$stroke-color}, -#{$i}px #{$i}px #{$stroke-color},
+        #{$i}px -#{$i}px #{$stroke-color}, #{$i}px #{$i}px #{$stroke-color},
+        -#{$i}px -#{$i + 1}px #{$stroke-color}, -#{$i}px #{$i + 1}px #{$stroke-color},
+        #{$i}px -#{$i + 1}px #{$stroke-color}, #{$i}px #{$i + 1}px #{$stroke-color},
+        -#{$i + 1}px -#{$i}px #{$stroke-color}, -#{$i + 1}px #{$i}px #{$stroke-color},
+        #{$i + 1}px -#{$i}px #{$stroke-color}, #{$i + 1}px #{$i}px #{$stroke-color}, #{$text-shadow};
+    }
+
+    text-shadow: $text-shadow;
     -webkit-text-stroke: 1px $stroke-color;
-    text-shadow: 3px 3px $stroke-color, -2px -2px $stroke-color, -2px 2px $stroke-color, 2px -2px $stroke-color, 2px 2px $stroke-color,
-      -1px -1px $stroke-color, -1px 1px $stroke-color, 1px -1px $stroke-color, 1px 1px $stroke-color;
   }
 }

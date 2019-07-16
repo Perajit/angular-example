@@ -23,7 +23,7 @@ $title-stroke-color: $dark-primary-color;
   width: 400px;
 
   > .title {
-    @include font-pokemon($title-text-color, $title-stroke-color);
+    @include font-pokemon($title-text-color, $title-stroke-color, 4);
     margin-bottom: 2rem;
   }
 
