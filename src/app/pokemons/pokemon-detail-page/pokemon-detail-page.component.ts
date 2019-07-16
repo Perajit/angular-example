@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { PokemonService } from '../../core/pokemons/pokemon.service';
@@ -17,7 +16,7 @@ export class PokemonDetailPageComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private location: Location,
+    private router: Router,
     private pokemonService: PokemonService,
     private pokemonMasterDataService: PokemonMasterdataService
   ) { }
@@ -55,6 +54,6 @@ export class PokemonDetailPageComponent implements OnInit {
   }
 
   navigateBack() {
-    this.location.back();
+    this.router.navigate(['/pokemons/list']);
   }
 }
