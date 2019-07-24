@@ -63,7 +63,7 @@ export class AuthService {
     return this.http.post(reqUrl, reqBody).pipe(
       catchError((e) => of(e)),
       finalize(() => {
-        this.currentUser = null;
+        this.currentUser = undefined;
       })
     );
   }
@@ -71,7 +71,7 @@ export class AuthService {
   private getStoredUser() {
     const storedValue = this.window.sessionStorage.getItem(this.userStorageKey);
 
-    return storedValue ? JSON.parse(storedValue) : null;
+    return storedValue ? JSON.parse(storedValue) : undefined;
   }
 
   private setStoredUser(user: User) {
