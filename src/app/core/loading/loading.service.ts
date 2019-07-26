@@ -18,6 +18,8 @@ export class LoadingService {
   }
 
   set isLoading(isLoading: boolean) {
-    this.isLoadingSubj.next(isLoading);
+    if (this.isLoading !== isLoading) {
+      this.isLoadingSubj.next(isLoading);
+    }
   }
 }

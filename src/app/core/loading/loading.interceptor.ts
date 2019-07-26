@@ -14,22 +14,20 @@ export class LoadingInterceptor implements HttpInterceptor {
     private loadingService: LoadingService
   ) { }
 
-  get hasPendingRequest() {
-    return this.totalPendingRequests > 0;
-  }
-
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     ++this.totalPendingRequests;
-    this.loadingService.isLoading = true;
+    this.updateLoadingStatus();
 
     return next.handle(req).pipe(
       finalize(() => {
         --this.totalPendingRequests;
-
-        if (!this.hasPendingRequest) {
-          this.loadingService.isLoading = false;
-        }
+        this.updateLoadingStatus();
       })
     );
+  }
+
+  private updateLoadingStatus() {
+    const hasPendingRequest = (this.totalPendingRequests > 0);
+    this.loadingService.isLoading = hasPendingRequest;
   }
 }

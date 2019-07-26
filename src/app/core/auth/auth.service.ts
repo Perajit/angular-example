@@ -63,7 +63,7 @@ export class AuthService {
     return this.http.post(reqUrl, reqBody).pipe(
       catchError((e) => of(e)),
       finalize(() => {
-        this.currentUser = undefined;
+        this.currentUser = null;
       })
     );
   }

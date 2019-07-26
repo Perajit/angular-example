@@ -1,12 +1,12 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync } from '@angular/core/testing';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS, HttpRequest } from '@angular/common/http';
+import { cold } from 'jasmine-marbles';
 
 import { LoadingInterceptor } from './loading.interceptor';
 import { LoadingService } from './loading.service';
-import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { cold } from 'jasmine-marbles';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-xdescribe('LoadingInterceptor', () => {
+describe('LoadingInterceptor', () => {
   let mockHttp: HttpTestingController;
   let httpClient: HttpClient;
   let loadingService: LoadingService;
@@ -35,43 +35,38 @@ xdescribe('LoadingInterceptor', () => {
     mockHttp.verify();
   });
 
-  it('should update isLoading status of loading service according to pending request', () => {
-    const mockRequests = [
+  it('should update loading status according to pending requests', fakeAsync(() => {
+    const testRequests = [
       { method: 'GET', url: 'http://example-1.com' },
-      { method: 'PUT', url: 'http://example-2.com' },
+      { method: 'POST', url: 'http://example-2.com' },
       { method: 'GET', url: 'http://example-3.com' }
     ];
-    const mockRequest$ = cold('a--bc', {
-      a: mockRequests[0],
-      b: mockRequests[1],
-      c: mockRequests[2]
+    const testRequest$ = cold('a---bc', {
+      a: testRequests[0],
+      b: testRequests[1],
+      c: testRequests[2]
     });
-    const mockResponse$ = cold('-a--bc', {
-      a: 0,
-      b: 1,
-      c: 2
+    const testResponse$ = cold('--a--b-c', {
+      a: testRequests[0].url,
+      b: testRequests[1].url,
+      c: testRequests[2].url
     });
-    const testReqs: TestRequest[] = [];
-
-    mockRequest$.subscribe((mockReq: { method: 'GET' | 'POST', url: string }) => {
-      const req = new HttpRequest(mockReq.method, mockReq.url, null);
-      httpClient.request(req).subscribe();
-
-      const testReq = mockHttp.expectOne(mockReq.url);
-      // testReq.flush(null);
-      testReqs.push(testReq);
+    const expectedLoadingStatus$ = cold('p-q-r--s', {
+      p: true,
+      q: false,
+      r: true,
+      s: false,
     });
 
-    mockResponse$.subscribe((index: number) => {
-      testReqs[index].flush(null);
+    testRequest$.subscribe(({ method, url }) => {
+      httpClient.request(new HttpRequest(method, url, null)).subscribe();
     });
 
-    const expectedLoadingStatus$ = cold('ab-c-d', {
-      a: true,
-      b: false,
-      c: true,
-      d: false
+    testResponse$.subscribe((url) => {
+      const testReq = mockHttp.expectOne(url);
+      testReq.flush(null);
     });
+
     expect(loadingService.isLoading$).toBeObservable(expectedLoadingStatus$);
-  });
+  }));
 });

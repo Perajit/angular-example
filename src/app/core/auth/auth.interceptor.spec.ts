@@ -11,7 +11,6 @@ describe('AuthInterceptor', () => {
   let httpClient: HttpClient;
   let authService: AuthService;
 
-  const mockReqUrl = 'http://example.com';
   const mockAuthToken = 'mock-token';
   const mockUsername = 'mock-username';
   const mockUser: User = {
@@ -59,9 +58,11 @@ describe('AuthInterceptor', () => {
   });
 
   it('should set Authorization header to request', () => {
-    httpClient.get(mockReqUrl).subscribe();
+    const reqUrl = 'http://example.com';
 
-    const testReq = mockHttp.expectOne(mockReqUrl);
+    httpClient.get(reqUrl).subscribe();
+
+    const testReq = mockHttp.expectOne(reqUrl);
 
     expect(testReq.request.headers.get('Authorization')).toEqual(`Bearer ${mockAuthToken}`);
   });

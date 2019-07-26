@@ -8,6 +8,7 @@ import { User } from './user.model';
 describe('AuthService', () => {
   let service: AuthService;
   let mockHttp: HttpTestingController;
+  let mockWindow: Window;
 
   const mockAuthToken = 'mock-token';
   const mockUsername = 'mock-username';
@@ -21,22 +22,28 @@ describe('AuthService', () => {
     }
   };
 
-  const mockWindow = {
-    sessionStorage: jasmine.createSpyObj(['getItem', 'setItem', 'removeItem'])
-  };
-  const getItemSpy = mockWindow.sessionStorage.getItem as jasmine.Spy;
-  const setItemSpy = mockWindow.sessionStorage.setItem as jasmine.Spy;
-  const removeItemSpy = mockWindow.sessionStorage.removeItem as jasmine.Spy;
+  // const mockWindow = {
+  //   sessionStorage: jasmine.createSpyObj(['getItem', 'setItem', 'removeItem'])
+  // };
+  // const getItemSpy = mockWindow.sessionStorage.getItem as jasmine.Spy;
+  // const setItemSpy = mockWindow.sessionStorage.setItem as jasmine.Spy;
+  // const removeItemSpy = mockWindow.sessionStorage.removeItem as jasmine.Spy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        HttpClientTestingModule,
+        AuthService,
         {
           provide: 'Window',
-          useFactory: () => mockWindow
+          useValue: {
+            sessionStorage: jasmine.createSpyObj(['getItem', 'setItem', 'removeItem'])
+          }
         }
+        // {
+        //   provide: 'Window',
+        //   useFactory: () => mockWindow
+        // }
       ]
     });
   });
@@ -44,13 +51,14 @@ describe('AuthService', () => {
   beforeEach(() => {
     service = TestBed.get(AuthService);
     mockHttp = TestBed.get(HttpTestingController);
+    mockWindow = TestBed.get('Window');
   });
 
   afterEach(() => {
     mockHttp.verify();
-    getItemSpy.calls.reset();
-    setItemSpy.calls.reset();
-    removeItemSpy.calls.reset();
+    // getItemSpy.calls.reset();
+    // setItemSpy.calls.reset();
+    // removeItemSpy.calls.reset();
   });
 
   it('should be created', () => {
@@ -58,23 +66,29 @@ describe('AuthService', () => {
   });
 
   describe('#currentUser$', () => {
-    it('should emit current logged user', () => {
-      const mockUsers = [
-        { ...mockUser },
-        null,
-        { ...mockUser, username: 'another-mock-username' }
-      ];
-      const mockUser$ = cold('a-b-c', {
-        a: mockUsers[0],
-        b: mockUsers[1],
-        c: mockUsers[2]
+    it('should emit current user', () => {
+      const testUser$ = cold('a-b-c', {
+        a: { ...mockUser },
+        b: null,
+        c: { ...mockUser, username: 'another-mock-username' }
       });
 
-      mockUser$.subscribe((user: User) => {
+      testUser$.subscribe((user: User) => {
         service.currentUser = user;
       });
 
-      expect(service.currentUser$).toBeObservable(mockUser$);
+      expect(service.currentUser$).toBeObservable(testUser$);
+    });
+  });
+
+  xdescribe('#currentUser', () => {
+    it('should get initial value from session storage', () => {
+      const getItemSpy = mockWindow.sessionStorage.getItem as jasmine.Spy;
+      const mockStoredValue = JSON.stringify(mockUser);
+
+      getItemSpy.and.returnValue(mockStoredValue);
+
+      expect(service.currentUser).toEqual(mockUser);
     });
   });
 
@@ -82,13 +96,13 @@ describe('AuthService', () => {
     it('should return true if use is logged in', () => {
       service.currentUser = mockUser;
 
-      expect(service.isLoggedIn()).toBe(true);
+      expect(service.isLoggedIn()).toEqual(true);
     });
 
     it('should return false if use is not logged in', () => {
       service.currentUser = null;
 
-      expect(service.isLoggedIn()).toBe(false);
+      expect(service.isLoggedIn()).toEqual(false);
     });
   });
 
@@ -145,21 +159,17 @@ describe('AuthService', () => {
       testReq.flush(null, errorRes);
     };
 
-    it('should return false', () => {
-      expect(false).toBe(false);
-    });
-
     it('should logout user', () => {
       setupLogoutCondition();
 
-      expect(service.currentUser).toBe(undefined);
+      expect(service.currentUser).toBeFalsy();
     });
 
-    describe('when logout API request fails', () => {
-      it('should catch error', () => {
+    describe('when logout request fails', () => {
+      it('should catch error and clear current user', () => {
         setupLogoutCondition({ status: 500, statusText: 'Internal Server Error' });
 
-        expect(returnedError).toBe(undefined);
+        expect(returnedError).toBeFalsy();
       });
     });
   });
