@@ -1,35 +1,43 @@
-import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { Location } from '@angular/common';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router, ActivatedRoute } from '@angular/router';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
-import { User } from './user.model';
+import { AuthModule } from '../../auth/auth.module';
+import { PokemonsModule } from '../../pokemons/pokemons.module';
+import { LoginPageComponent } from '../../auth/login-page/login-page.component';
+import { PokemonListComponent } from '../../pokemons/pokemon-list-page/pokemon-list/pokemon-list.component';
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;
   let authService: AuthService;
+  let location: Location;
+  let router: Router;
+  let route: ActivatedRoute;
 
-  const mockUser: User = {
-    token: 'mock-token',
-    username: 'mock-username',
-    profile: {
-      firstname: 'mock-firstname',
-      lastname: 'mock-lastname'
-    }
-  };
+  const mockAuthServiceFactory = () => jasmine.createSpyObj([
+    'isLoggedIn'
+  ]);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes([
+          { path: 'login', component: LoginPageComponent },
+          { path: 'pokemons', component: PokemonListComponent }
+        ]),
+        AuthModule,
+        PokemonsModule
+      ],
       providers: [
         AuthGuard,
         {
           provide: AuthService,
-          useValue: {
-            authToken: null,
-            login: jasmine.createSpy()
-          }
+          useValue: mockAuthServiceFactory()
         }
       ]
     });
@@ -38,16 +46,22 @@ describe('AuthGuard', () => {
   beforeEach(() => {
     guard = TestBed.get(AuthGuard);
     authService = TestBed.get(AuthService);
+    location = TestBed.get(Location);
+    router = TestBed.get(Router);
+    route = TestBed.get(ActivatedRoute);
+
+    router.initialNavigation();
   });
 
   it('should be created', () => {
     expect(guard).toBeTruthy();
   });
 
-  xdescribe('#canActivate()', () => {
+  describe('#canActivate()', () => {
     describe('when user is logged in', () => {
       beforeEach(() => {
-        authService.currentUser = mockUser;
+        const isLoggedInSpy = authService.isLoggedIn as jasmine.Spy;
+        isLoggedInSpy.and.returnValue(true);
       });
 
       it('should return true', () => {
@@ -56,6 +70,36 @@ describe('AuthGuard', () => {
 
         expect(guard.canActivate(mockRouteSnapshot, mockStateSnapshot)).toBe(true);
       });
+    });
+
+    describe('when user is not logged in', () => {
+      beforeEach(() => {
+        const isLoggedInSpy = authService.isLoggedIn as jasmine.Spy;
+        isLoggedInSpy.and.returnValue(false);
+      });
+
+      it('should return false', () => {
+        const mockRouteSnapshot = { } as ActivatedRouteSnapshot;
+        const mockStateSnapshot = { } as RouterStateSnapshot;
+
+        expect(guard.canActivate(mockRouteSnapshot, mockStateSnapshot)).toBe(false);
+      });
+
+      it('should redirect to login page with query param for next url', fakeAsync(() => {
+        const mockRouteSnapshot = { } as ActivatedRouteSnapshot;
+        const mockStateSnapshot = {
+          url: '/pokemons'
+        } as RouterStateSnapshot;
+
+        guard.canActivate(mockRouteSnapshot, mockStateSnapshot);
+
+        tick();
+
+        expect(location.path()).toMatch(/^\/login\??/);
+        expect(route.snapshot.queryParams).toEqual({
+          nextUrl: mockStateSnapshot.url
+        });
+      }));
     });
   });
 });

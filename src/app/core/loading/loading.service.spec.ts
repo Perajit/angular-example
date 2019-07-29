@@ -24,15 +24,16 @@ describe('LoadingService', () => {
 
   describe('#isLoading$', () => {
     it('should emit current loading status when the value is changed', () => {
-      const loadingStatus$ = cold('--a-b-c', {
+      const loadingStatus$ = cold('--a-b--c', {
         a: true,
         b: true,
         c: false
       });
-      const expectedLoadingStatuses$ = cold('a-b---c', {
+      const expectedLoadingStatuses$ = cold('a-b-c--d', {
         a: false,
         b: true,
-        c: false
+        c: true,
+        d: false
       });
 
       loadingStatus$.subscribe((isLoading: boolean) => {

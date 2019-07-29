@@ -22,12 +22,13 @@ describe('AuthService', () => {
     }
   };
 
-  // const mockWindow = {
-  //   sessionStorage: jasmine.createSpyObj(['getItem', 'setItem', 'removeItem'])
-  // };
-  // const getItemSpy = mockWindow.sessionStorage.getItem as jasmine.Spy;
-  // const setItemSpy = mockWindow.sessionStorage.setItem as jasmine.Spy;
-  // const removeItemSpy = mockWindow.sessionStorage.removeItem as jasmine.Spy;
+  const mockWindowFactory = () => ({
+    sessionStorage: {
+      getItem: jasmine.createSpy().withArgs(AuthService.userStorageKey).and.returnValue(JSON.stringify(mockUser)),
+      setItem: jasmine.createSpy(),
+      removeItem: jasmine.createSpy()
+    }
+  });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -36,14 +37,8 @@ describe('AuthService', () => {
         AuthService,
         {
           provide: 'Window',
-          useValue: {
-            sessionStorage: jasmine.createSpyObj(['getItem', 'setItem', 'removeItem'])
-          }
+          useValue: mockWindowFactory()
         }
-        // {
-        //   provide: 'Window',
-        //   useFactory: () => mockWindow
-        // }
       ]
     });
   });
@@ -56,9 +51,6 @@ describe('AuthService', () => {
 
   afterEach(() => {
     mockHttp.verify();
-    // getItemSpy.calls.reset();
-    // setItemSpy.calls.reset();
-    // removeItemSpy.calls.reset();
   });
 
   it('should be created', () => {
@@ -66,7 +58,7 @@ describe('AuthService', () => {
   });
 
   describe('#currentUser$', () => {
-    it('should emit current user', () => {
+    it('should emit current user value when current user is set', () => {
       const testUser$ = cold('a-b-c', {
         a: { ...mockUser },
         b: null,
@@ -81,14 +73,27 @@ describe('AuthService', () => {
     });
   });
 
-  xdescribe('#currentUser', () => {
+  describe('#currentUser', () => {
     it('should get initial value from session storage', () => {
-      const getItemSpy = mockWindow.sessionStorage.getItem as jasmine.Spy;
-      const mockStoredValue = JSON.stringify(mockUser);
+      const storedValue = mockWindow.sessionStorage.getItem(AuthService.userStorageKey);
+      const expectedValue = JSON.parse(storedValue);
 
-      getItemSpy.and.returnValue(mockStoredValue);
+      expect(service.currentUser).toEqual(expectedValue);
+    });
 
-      expect(service.currentUser).toEqual(mockUser);
+    it('should get / set value correctly', () => {
+      service.currentUser = mockUser;
+
+      expect(service.currentUser).toBe(mockUser);
+    });
+
+    it('should store current user to session storage', () => {
+      service.currentUser = mockUser;
+
+      const setItemSpy = mockWindow.sessionStorage.setItem as jasmine.Spy;
+      const expectedValue = JSON.stringify(mockUser);
+
+      expect(setItemSpy).toHaveBeenCalledWith(AuthService.userStorageKey, expectedValue);
     });
   });
 
@@ -117,7 +122,7 @@ describe('AuthService', () => {
         returnedValue = res;
       });
 
-      const loginApiUrl = `${service.authApiUrl}/login`;
+      const loginApiUrl = `${AuthService.authApiUrl}/login`;
 
       testReq = mockHttp.expectOne(loginApiUrl);
       testReq.flush(user);
@@ -153,7 +158,7 @@ describe('AuthService', () => {
         }
       );
 
-      const logoutApiUrl = `${service.authApiUrl}/logout`;
+      const logoutApiUrl = `${AuthService.authApiUrl}/logout`;
 
       testReq = mockHttp.expectOne(logoutApiUrl);
       testReq.flush(null, errorRes);
