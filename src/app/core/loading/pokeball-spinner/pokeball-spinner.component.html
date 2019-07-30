@@ -1,8 +1,8 @@
 <ng-container *ngIf="isLoading$ | async">
   <div class="overlay-layer"></div>
-  <div class="spinner-layer" [ngStyle]="{ width: styleWithUnit, height: styleWithUnit }">
-    <div class="circle outter" [ngStyle]="{ backgroundColor: color }">
-      <div class="circle inner" [ngStyle]="{ borderWidth: dividerWidth }"></div>
+  <div class="spinner-layer" [ngStyle]="{ width: ballSizeWithUnit, height: ballSizeWithUnit }">
+    <div class="circle ball" [ngStyle]="{ backgroundColor: color }">
+      <div class="circle core" [ngStyle]="{ borderWidth: coreOutlineWithUnit }"></div>
     </div>
   </div>
 </ng-container>

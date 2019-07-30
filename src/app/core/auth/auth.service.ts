@@ -14,15 +14,13 @@ export class AuthService {
   static readonly userStorageKey = 'ngexample_user';
 
   currentUser$: Observable<User>;
-
-  private currentUserSubj: BehaviorSubject<User> = new BehaviorSubject(null);
+  private currentUserSubj: BehaviorSubject<User> = new BehaviorSubject(this.getStoredUser());
 
   constructor(
     private http: HttpClient,
     @Inject('Window') private window: Window
   ) {
     this.currentUser$ = this.currentUserSubj.asObservable();
-    this.currentUser = this.getStoredUser();
   }
 
   get currentUser() {

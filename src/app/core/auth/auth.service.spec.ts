@@ -57,22 +57,6 @@ describe('AuthService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('#currentUser$', () => {
-    it('should emit current user value when current user is set', () => {
-      const testUser$ = cold('a-b-c', {
-        a: { ...mockUser },
-        b: null,
-        c: { ...mockUser, username: 'another-mock-username' }
-      });
-
-      testUser$.subscribe((user: User) => {
-        service.currentUser = user;
-      });
-
-      expect(service.currentUser$).toBeObservable(testUser$);
-    });
-  });
-
   describe('#currentUser', () => {
     it('should get initial value from session storage', () => {
       const storedValue = mockWindow.sessionStorage.getItem(AuthService.userStorageKey);
@@ -94,6 +78,22 @@ describe('AuthService', () => {
       const expectedValue = JSON.stringify(mockUser);
 
       expect(setItemSpy).toHaveBeenCalledWith(AuthService.userStorageKey, expectedValue);
+    });
+  });
+
+  describe('#currentUser$', () => {
+    it('should emit current user when the value is set', () => {
+      const user$ = cold('a-b-c', {
+        a: { ...mockUser },
+        b: null,
+        c: { ...mockUser, username: 'another-mock-username' }
+      });
+
+      user$.subscribe((user: User) => {
+        service.currentUser = user;
+      });
+
+      expect(service.currentUser$).toBeObservable(user$);
     });
   });
 
@@ -128,19 +128,18 @@ describe('AuthService', () => {
       testReq.flush(user);
     };
 
-    it('should login user with username and password', () => {
+    it('should call api to login user with username and password', () => {
       setupLoginCondition(mockUsername, mockPassword, mockUser);
 
       expect(testReq.request.method).toEqual('POST', 'call POST request');
       expect(testReq.request.headers.get('Content-Type')).toEqual('application/x-www-form-urlencoded', 'with encoded content');
       expect(testReq.request.body).toEqual({ username: mockUsername, password: mockPassword }, 'with username and password');
-
-      expect(currentUser).toEqual(mockUser, 'update current user');
     });
 
-    it('should return current user', () => {
+    it('should set and return current user', () => {
       setupLoginCondition(mockUsername, mockPassword, mockUser);
 
+      expect(currentUser).toEqual(mockUser, 'set current user');
       expect(returnedValue).toEqual(mockUser, 'return current user');
     });
   });
@@ -164,7 +163,13 @@ describe('AuthService', () => {
       testReq.flush(null, errorRes);
     };
 
-    it('should logout user', () => {
+    it('should call api to logout user', () => {
+      setupLogoutCondition();
+
+      expect(testReq.request.method).toEqual('POST', 'call POST request');
+    });
+
+    it('should clear current user', () => {
       setupLogoutCondition();
 
       expect(service.currentUser).toBeFalsy();

@@ -22,8 +22,20 @@ describe('LoadingService', () => {
     expect(service).toBeTruthy();
   });
 
+  describe('isLoading', () => {
+    it('should set initial value as false', () => {
+      expect(service.isLoading).toBe(false);
+    });
+
+    it('should get / set value correctly', () => {
+      service.isLoading = true;
+
+      expect(service.isLoading).toBe(true);
+    });
+  });
+
   describe('#isLoading$', () => {
-    it('should emit current loading status when the value is changed', () => {
+    it('should emit loading status when the value is set', () => {
       const loadingStatus$ = cold('--a-b--c', {
         a: true,
         b: true,

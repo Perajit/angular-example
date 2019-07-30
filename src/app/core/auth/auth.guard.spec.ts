@@ -1,8 +1,8 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { Location } from '@angular/common';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, Router, ActivatedRoute } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Location } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
@@ -28,7 +28,7 @@ describe('AuthGuard', () => {
         HttpClientTestingModule,
         RouterTestingModule.withRoutes([
           { path: 'login', component: LoginPageComponent },
-          { path: 'pokemons', component: PokemonListComponent }
+          { path: 'pokemons', component: PokemonListComponent, canActivate: [AuthGuard] }
         ]),
         AuthModule,
         PokemonsModule
@@ -64,12 +64,13 @@ describe('AuthGuard', () => {
         isLoggedInSpy.and.returnValue(true);
       });
 
-      it('should return true', () => {
-        const mockRouteSnapshot = { } as ActivatedRouteSnapshot;
-        const mockStateSnapshot = { } as RouterStateSnapshot;
+      it('should allow access to requested url', fakeAsync(() => {
+        router.navigate(['/pokemons']);
 
-        expect(guard.canActivate(mockRouteSnapshot, mockStateSnapshot)).toBe(true);
-      });
+        tick();
+
+        expect(location.path()).toEqual('/pokemons');
+      }));
     });
 
     describe('when user is not logged in', () => {
@@ -78,26 +79,14 @@ describe('AuthGuard', () => {
         isLoggedInSpy.and.returnValue(false);
       });
 
-      it('should return false', () => {
-        const mockRouteSnapshot = { } as ActivatedRouteSnapshot;
-        const mockStateSnapshot = { } as RouterStateSnapshot;
-
-        expect(guard.canActivate(mockRouteSnapshot, mockStateSnapshot)).toBe(false);
-      });
-
       it('should redirect to login page with query param for next url', fakeAsync(() => {
-        const mockRouteSnapshot = { } as ActivatedRouteSnapshot;
-        const mockStateSnapshot = {
-          url: '/pokemons'
-        } as RouterStateSnapshot;
-
-        guard.canActivate(mockRouteSnapshot, mockStateSnapshot);
+        router.navigate(['/pokemons']);
 
         tick();
 
         expect(location.path()).toMatch(/^\/login\??/);
         expect(route.snapshot.queryParams).toEqual({
-          nextUrl: mockStateSnapshot.url
+          nextUrl: '/pokemons'
         });
       }));
     });

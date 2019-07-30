@@ -59,22 +59,6 @@ describe('LoadingInterceptor', () => {
       t: true,
       u: false,
     });
-    // const testRequest$ = cold('a---bc', {
-    //   a: testRequests[0],
-    //   b: testRequests[1],
-    //   c: testRequests[2]
-    // });
-    // const testResponse$ = cold('--a--b-c', {
-    //   a: testRequests[0].url,
-    //   b: testRequests[1].url,
-    //   c: testRequests[2].url
-    // });
-    // const expectedLoadingStatus$ = cold('p-q-r--s', {
-    //   p: true,
-    //   q: false,
-    //   r: true,
-    //   s: false
-    // });
 
     testRequest$.subscribe(({ method, url }) => {
       httpClient.request(new HttpRequest(method, url, null)).subscribe();

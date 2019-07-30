@@ -28,9 +28,6 @@ export class LoadingInterceptor implements HttpInterceptor {
 
   private updateLoadingStatus() {
     const hasPendingRequest = (this.totalPendingRequests > 0);
-    // if (this.loadingService.isLoading !== hasPendingRequest) {
-    //   this.loadingService.isLoading = hasPendingRequest;
-    // }
     this.loadingService.isLoading = hasPendingRequest;
   }
 }
