@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Pokemon } from 'src/app/core/pokemons/pokemon.model';
+import { Pokemon, PokemonInput } from 'src/app/core/pokemons/pokemon.model';
 import { PokemonClass } from 'src/app/core/pokemons/pokemon-class.model';
 import { PokemonFormField } from './pokemon-form.model';
 
@@ -30,7 +30,7 @@ export class PokemonFormComponent implements OnInit {
   }
 
   get pokemonData() {
-    return this.pokemon || ({ } as Partial<Pokemon>);
+    return this.pokemon || ({ } as PokemonInput);
   }
 
   ngOnInit() {

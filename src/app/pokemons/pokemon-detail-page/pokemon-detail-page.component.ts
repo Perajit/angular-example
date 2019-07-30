@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { PokemonService } from '../../core/pokemons/pokemon.service';
 import { PokemonMasterdataService } from '../../core/pokemons/pokemon-masterdata.service';
-import { Pokemon } from '../../core/pokemons/pokemon.model';
+import { Pokemon, PokemonInput } from '../../core/pokemons/pokemon.model';
 
 @Component({
   selector: 'app-pokemon-detail-page',
@@ -35,11 +35,11 @@ export class PokemonDetailPageComponent implements OnInit {
     this.pokemonMasterDataService.loadPokemonClasses();
   }
 
-  onSavePokemon(data: Partial<Pokemon>) {
+  onSavePokemon(data: PokemonInput) {
     let req$: Observable<any>;
 
     if (this.pokemon) {
-      req$ = this.pokemonService.updatePokemon(this.pokemon, data);
+      req$ = this.pokemonService.updatePokemon(this.pokemon.id, data);
     } else {
       req$ = this.pokemonService.addPokemon(data);
     }

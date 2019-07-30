@@ -9,7 +9,7 @@ import { PokemonClass } from '../../../core/pokemons/pokemon-class.model';
   styleUrls: ['./pokemon-list.component.scss']
 })
 export class PokemonListComponent implements OnInit {
-  @Input() pokemons: Partial<Pokemon>[];
+  @Input() pokemons: Pokemon[];
   @Input() pokemonClasses: PokemonClass[];
   @Output() editPokemon: EventEmitter<any> = new EventEmitter();
   @Output() removePokemon: EventEmitter<any> = new EventEmitter();

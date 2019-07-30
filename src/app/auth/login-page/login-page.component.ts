@@ -40,7 +40,7 @@ export class LoginPageComponent implements OnInit {
     const isLoggedIn = this.authService.isLoggedIn();
 
     if (isLoggedIn) {
-      this.navigateToReturnUrl();
+      this.navigateToNextUrl();
       return;
     }
   }
@@ -53,12 +53,9 @@ export class LoginPageComponent implements OnInit {
 
     const { username, password } = this.formControls;
     this.authService.login(username.value, password.value).subscribe(() => {
-      this.navigateToReturnUrl();
+      console.log('--- nextUrl', this.nextUrl);
+      this.navigateToNextUrl();
     });
-  }
-
-  navigateToReturnUrl() {
-    this.router.navigate([`/${this.nextUrl}`]);
   }
 
   hasError(fieldName: LoginFormField) {
@@ -82,6 +79,10 @@ export class LoginPageComponent implements OnInit {
     if (errors.required) {
       return `This field is required`;
     }
+  }
+
+  private navigateToNextUrl() {
+    this.router.navigate([`/${this.nextUrl}`]);
   }
 
   private markAllFieldAsDirty() {

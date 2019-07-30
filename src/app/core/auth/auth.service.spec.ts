@@ -34,7 +34,6 @@ describe('AuthService', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        AuthService,
         {
           provide: 'Window',
           useValue: mockWindowFactory()
