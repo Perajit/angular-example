@@ -53,7 +53,6 @@ export class LoginPageComponent implements OnInit {
 
     const { username, password } = this.formControls;
     this.authService.login(username.value, password.value).subscribe(() => {
-      console.log('--- nextUrl', this.nextUrl);
       this.navigateToNextUrl();
     });
   }

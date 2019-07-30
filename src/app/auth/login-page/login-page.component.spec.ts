@@ -7,9 +7,9 @@ import { of } from 'rxjs';
 
 import { LoginPageComponent } from './login-page.component';
 import { PokemonListComponent } from 'src/app/pokemons/pokemon-list-page/pokemon-list/pokemon-list.component';
-import { AuthService } from '../../core/auth/auth.service';
-import { AuthModule } from '../auth.module';
 import { PokemonsModule } from 'src/app/pokemons/pokemons.module';
+import { AuthService } from '../../core/auth/auth.service';
+import { User } from 'src/app/core/auth/user.model';
 
 describe('LoginPageComponent', () => {
   let component: LoginPageComponent;
@@ -17,10 +17,17 @@ describe('LoginPageComponent', () => {
   let authService: AuthService;
   let location: Location;
   let router: Router;
-  let route: ActivatedRoute;
 
   const mockUsername = 'mock-username';
   const mockPassword = 'mock-password';
+  const mockUser: User = {
+    token: 'mock-token',
+    username: mockUsername,
+    profile: {
+      firstname: 'mock-firstname',
+      lastname: 'mock-lastname'
+    }
+  };
 
   const mockAuthServiceFactory = () => jasmine.createSpyObj([
     'login',
@@ -36,7 +43,6 @@ describe('LoginPageComponent', () => {
           { path: 'login', component: LoginPageComponent },
           { path: 'pokemons', component: PokemonListComponent }
         ]),
-        // AuthModule,
         PokemonsModule
       ],
       providers: [
@@ -67,7 +73,6 @@ describe('LoginPageComponent', () => {
     authService = TestBed.get(AuthService);
     location = TestBed.get(Location);
     router = TestBed.get(Router);
-    route = TestBed.get(ActivatedRoute);
     router.initialNavigation();
 
     const isLoggedInSpy = authService.isLoggedIn as jasmine.Spy;
@@ -87,7 +92,7 @@ describe('LoginPageComponent', () => {
 
     describe('when login form is valid', () => {
       beforeEach(() => {
-        loginSpy.and.returnValue(of()); // FIXME
+        loginSpy.and.returnValue(of(mockUser));
 
         const formControls = component.loginForm.controls;
         formControls.username.setValue(mockUsername);
@@ -100,13 +105,13 @@ describe('LoginPageComponent', () => {
         expect(loginSpy).toHaveBeenCalledWith(mockUsername, mockPassword);
       });
 
-      // it('should redirect to next url after login', fakeAsync(() => {
-      //   component.onSubmit();
+      it('should redirect to next url after login', fakeAsync(() => {
+        component.onSubmit();
 
-      //   tick();
+        tick();
 
-      //   expect(location.path()).toBe('/pokemons');
-      // }));
+        expect(location.path()).toBe('/pokemons');
+      }));
     });
 
     describe('when login form is invalid', () => { });
