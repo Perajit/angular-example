@@ -57,7 +57,7 @@ describe('PokemonService', () => {
       fetchPokemonsSpy = spyOn(service, 'fetchPokemons').and.returnValue(of(mockPokemons));
     });
 
-    it('should not fetch pokemons if exists', () => {
+    it('should not fetch pokemons if current value is available', () => {
       service.pokemons = mockPokemons;
 
       service.loadPokemons();
@@ -65,7 +65,7 @@ describe('PokemonService', () => {
       expect(fetchPokemonsSpy).not.toHaveBeenCalled();
     });
 
-    it('should fetch pokemons if current pokemons does not exist', () => {
+    it('should fetch pokemons if current value is unavailable', () => {
       service.pokemons = null;
 
       service.loadPokemons();
@@ -97,7 +97,7 @@ describe('PokemonService', () => {
       expect(testReq.request.method).toEqual('GET', 'call GET request');
     });
 
-    it('should set and return current pokemons', () => {
+    it('should set and return value of current pokemons', () => {
       setupFetchCondition(mockPokemons);
 
       expect(fetchedPokemons).toEqual(mockPokemons, 'set pokemons');
@@ -248,7 +248,7 @@ describe('PokemonService', () => {
       });
     });
 
-    describe('when pokemon id does not exists', () => {
+    describe('when pokemon id does not exist', () => {
       const mockPokemonIds = (mockPokemons.map((pokemon) => pokemon.id));
       const testCases = [
         Math.min(...mockPokemonIds) - 1,

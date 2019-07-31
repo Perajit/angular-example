@@ -32,7 +32,7 @@ describe('PokemonMasterdataService', () => {
       fetchPokemonsSpy = spyOn(service, 'fetchPokemonClasses').and.returnValue(of(mockPokemonClasses));
     });
 
-    it('should not fetch pokemons if exists', () => {
+    it('should not fetch pokemon classes if current value is available', () => {
       service.pokemonClasses = mockPokemonClasses;
 
       service.loadPokemonClasses();
@@ -40,7 +40,7 @@ describe('PokemonMasterdataService', () => {
       expect(fetchPokemonsSpy).not.toHaveBeenCalled();
     });
 
-    it('should fetch pokemons if current pokemons does not exist', () => {
+    it('should fetch pokemon classes if current value is unavailable', () => {
       service.pokemonClasses = null;
 
       service.loadPokemonClasses();
@@ -66,13 +66,13 @@ describe('PokemonMasterdataService', () => {
       testReq.flush(pokemons);
     };
 
-    it('should fetch pokemons from api', () => {
+    it('should fetch pokemon classes from api', () => {
       setupFetchCondition(mockPokemonClasses);
 
       expect(testReq.request.method).toEqual('GET', 'call GET request');
     });
 
-    it('should set and return current pokemons', () => {
+    it('should set and return value of pokemon classes', () => {
       setupFetchCondition(mockPokemonClasses);
 
       expect(fetchedPokemonClasses).toEqual(mockPokemonClasses, 'set pokemon classes');

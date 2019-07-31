@@ -83,7 +83,7 @@ describe('AuthService', () => {
   describe('#currentUser$', () => {
     it('should emit current user when the value is set', () => {
       const user$ = cold('a-b-c', {
-        a: { ...mockUser },
+        a: mockUser,
         b: null,
         c: { ...mockUser, username: 'another-mock-username' }
       });
@@ -135,7 +135,7 @@ describe('AuthService', () => {
       expect(testReq.request.body).toEqual({ username: mockUsername, password: mockPassword }, 'with username and password');
     });
 
-    it('should set and return current user', () => {
+    it('should set and return value of current user', () => {
       setupLoginCondition(mockUsername, mockPassword, mockUser);
 
       expect(currentUser).toEqual(mockUser, 'set current user');
@@ -148,7 +148,7 @@ describe('AuthService', () => {
     let returnedError: any;
 
     const setupLogoutCondition = (errorRes?: any) => {
-      service.currentUser = mockUser; // Force logged user to exists
+      service.currentUser = mockUser; // Force to have logged user
       service.logout().subscribe(
         () => { },
         (error: any) => {

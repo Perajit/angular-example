@@ -38,10 +38,10 @@ export class LoginPageComponent implements OnInit {
   }
 
   onSubmit() {
-    const isFormInvalid = this.loginForm.invalid;
+    this.markAllFieldAsDirty();
 
+    const isFormInvalid = this.loginForm.invalid;
     if (isFormInvalid) {
-      this.markAllFieldAsDirty();
       return;
     }
 
