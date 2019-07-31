@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { mergeMap, tap, switchMap } from 'rxjs/operators';
+import { tap, switchMap, takeLast } from 'rxjs/operators';
 
 import { Pokemon, PokemonInput } from './pokemon.model';
 import { environment } from 'src/environments/environment';
@@ -41,6 +41,7 @@ export class PokemonService {
     const reqUrl = `${PokemonService.pokemonApiUrl}/list`;
 
     return this.http.get(reqUrl).pipe(
+      // takeLast(1),
       tap((pokemons: Pokemon[]) => {
         this.pokemons = pokemons;
       })
@@ -52,6 +53,7 @@ export class PokemonService {
     const reqBody = pokemonInput;
 
     return this.http.post(reqUrl, reqBody).pipe(
+      takeLast(1),
       switchMap(() => this.fetchPokemons())
     );
   }
@@ -60,6 +62,7 @@ export class PokemonService {
     const reqUrl = `${PokemonService.pokemonApiUrl}/${pokemonId}`;
 
     return this.http.delete(reqUrl).pipe(
+      takeLast(1),
       switchMap(() => this.fetchPokemons())
     );
   }
@@ -69,6 +72,7 @@ export class PokemonService {
     const reqBody = pokemonInput;
 
     return this.http.put(reqUrl, reqBody).pipe(
+      takeLast(1),
       switchMap(() => this.fetchPokemons())
     );
   }

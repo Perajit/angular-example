@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { tap, finalize, catchError } from 'rxjs/operators';
+import { tap, finalize, catchError, takeLast } from 'rxjs/operators';
 
 import { User } from './user.model';
 import { environment } from 'src/environments/environment';
@@ -49,6 +49,7 @@ export class AuthService {
     };
 
     return this.http.post(reqUrl, reqBody, reqOptions).pipe(
+      takeLast(1),
       tap((user: User) => {
         this.currentUser = user;
       })
@@ -60,6 +61,7 @@ export class AuthService {
     const reqBody = null;
 
     return this.http.post(reqUrl, reqBody).pipe(
+      takeLast(1),
       catchError((e) => of(e)),
       finalize(() => {
         this.currentUser = null;

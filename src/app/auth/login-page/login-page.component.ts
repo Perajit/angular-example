@@ -22,14 +22,6 @@ export class LoginPageComponent implements OnInit {
     private authService: AuthService
   ) { }
 
-  get formControls() {
-    return this.loginForm.controls;
-  }
-
-  get isFormInvalid() {
-    return this.loginForm.invalid;
-  }
-
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -46,38 +38,23 @@ export class LoginPageComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.isFormInvalid) {
+    const isFormInvalid = this.loginForm.invalid;
+
+    if (isFormInvalid) {
       this.markAllFieldAsDirty();
       return;
     }
 
-    const { username, password } = this.formControls;
+    const { username, password } = this.loginForm.controls;
     this.authService.login(username.value, password.value).subscribe(() => {
       this.navigateToNextUrl();
     });
   }
 
-  hasError(fieldName: LoginFormField) {
-    const control = this.formControls[fieldName];
-
-    if (!control) {
-      return;
-    }
+  shouldShowError(fieldName: LoginFormField) {
+    const control = this.loginForm.controls[fieldName];
 
     return control.dirty && control.invalid;
-  }
-
-  getErrorMessage(fieldName: LoginFormField) {
-    const control = this.formControls[fieldName];
-    const errors = control ? control.errors : null;
-
-    if (!errors) {
-      return;
-    }
-
-    if (errors.required) {
-      return `This field is required`;
-    }
   }
 
   private navigateToNextUrl() {
@@ -85,7 +62,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   private markAllFieldAsDirty() {
-    const formControls = this.formControls;
+    const formControls = this.loginForm.controls;
     const fieldNames = Object.keys(formControls);
 
     fieldNames.forEach((fieldName) => {
