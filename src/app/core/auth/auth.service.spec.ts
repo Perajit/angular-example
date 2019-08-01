@@ -67,7 +67,7 @@ describe('AuthService', () => {
     it('should get / set value correctly', () => {
       service.currentUser = mockUser;
 
-      expect(service.currentUser).toBe(mockUser);
+      expect(service.currentUser).toEqual(mockUser);
     });
 
     it('should store current user to session storage', () => {

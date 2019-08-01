@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { PokemonListComponent } from './pokemon-list.component';
 import { PokemonsModule } from '../../pokemons.module';
-import mockPokemons from 'src/app/mock/pokemons/mock-pokemons';
-import { By } from '@angular/platform-browser';
+import mockPokemons from '../../../core/pokemons/mock/mock-pokemons';
 
 describe('PokemonListComponent', () => {
   let component: PokemonListComponent;
@@ -72,15 +72,15 @@ describe('PokemonListComponent', () => {
     });
   });
 
-  describe('#onClickEditPokemon()', () => {
+  xdescribe('#onClickEditPokemon()', () => {
     //
   });
 
-  describe('#onClickRemovePokemon()', () => {
+  xdescribe('#onClickRemovePokemon()', () => {
     //
   });
 
-  describe('#getItemBackgroundImageStyle()', () => {
+  xdescribe('#getItemBackgroundImageStyle()', () => {
     //
   });
 });

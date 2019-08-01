@@ -66,7 +66,6 @@ describe('AuthGuard', () => {
 
       it('should allow access to requested url', fakeAsync(() => {
         router.navigate(['/pokemons']);
-
         tick();
 
         expect(location.path()).toEqual('/pokemons');
@@ -81,7 +80,6 @@ describe('AuthGuard', () => {
 
       it('should redirect to login page with query param for next url', fakeAsync(() => {
         router.navigate(['/pokemons']);
-
         tick();
 
         expect(location.path()).toMatch(/^\/login\??/);

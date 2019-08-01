@@ -30,7 +30,7 @@ describe('PokemonService', () => {
     it('should get / set value correctly', () => {
       service.pokemons = mockPokemons;
 
-      expect(service.pokemons).toBe(mockPokemons);
+      expect(service.pokemons).toEqual(mockPokemons);
     });
   });
 

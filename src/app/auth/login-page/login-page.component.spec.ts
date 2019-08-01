@@ -40,7 +40,6 @@ describe('LoginPageComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([
-          { path: 'login', component: LoginPageComponent },
           { path: 'pokemons', component: PokemonListComponent }
         ]),
         AuthModule,
@@ -103,10 +102,9 @@ describe('LoginPageComponent', () => {
       (authService.isLoggedIn as jasmine.Spy).and.returnValue(true);
 
       component.ngOnInit();
-
       tick();
 
-      expect(location.path()).toBe('/pokemons');
+      expect(location.path()).toEqual('/pokemons');
     }));
   });
 
@@ -139,10 +137,9 @@ describe('LoginPageComponent', () => {
 
       it('should redirect to next url after login', fakeAsync(() => {
         component.onSubmit();
-
         tick();
 
-        expect(location.path()).toBe('/pokemons');
+        expect(location.path()).toEqual('/pokemons');
       }));
     });
 

@@ -2,8 +2,8 @@ import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core
 import { RouterTestingModule } from '@angular/router/testing';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { of, from } from 'rxjs';
-import { cold, getTestScheduler } from 'jasmine-marbles';
+import { of } from 'rxjs';
+import { cold } from 'jasmine-marbles';
 
 import { HeaderComponent } from './header.component';
 import { LoginPageComponent } from 'src/app/auth/login-page/login-page.component';
@@ -137,10 +137,9 @@ describe('HeaderComponent', () => {
 
     it('should redirect to login page after logout', fakeAsync(() => {
       component.onLogout();
-
       tick();
 
-      expect(location.path()).toBe('/login');
+      expect(location.path()).toEqual('/login');
     }));
   });
 });
