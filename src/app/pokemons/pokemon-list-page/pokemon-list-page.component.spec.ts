@@ -36,7 +36,7 @@ describe('PokemonListPageComponent', () => {
       imports: [
         RouterTestingModule.withRoutes([
           { path: 'pokemons/list', component: PokemonListPageComponent },
-          { path: 'pokemons/detail', component: PokemonDetailPageComponent }
+          { path: 'pokemons/detail/:id', component: PokemonDetailPageComponent }
         ]),
         PokemonsModule
       ],
@@ -82,16 +82,25 @@ describe('PokemonListPageComponent', () => {
 
   xdescribe('#pokemonClasses', () => { });
 
-  xdescribe('#onEditPokemon()', () => {
+  describe('#onEditPokemon()', () => {
     it('should redirect to pokemon detail page', fakeAsync(() => {
       const pokemon = mockPokemons[0];
 
       component.onEditPokemon(pokemon);
       tick();
 
-      expect(location.path()).toEqual(`/pokemons/${pokemon.id}`);
+      expect(location.path()).toEqual(`/pokemons/detail/${pokemon.id}`);
     }));
   });
 
-  xdescribe('#onRemovePokemon()', () => { });
+  describe('#onRemovePokemon()', () => {
+    it('should call pokemonService.removePokemon()', () => {
+      const removedPokemon = mockPokemons[0];
+      (pokemonService.removePokemon as jasmine.Spy).and.returnValue(of(mockPokemons));
+
+      component.onRemovePokemon(removedPokemon);
+
+      expect(pokemonService.removePokemon).toHaveBeenCalledWith(removedPokemon.id);
+    });
+  });
 });

@@ -129,7 +129,7 @@ describe('HeaderComponent', () => {
   });
 
   describe('#onLogout()', () => {
-    it('should call logout service', () => {
+    it('should call authService.logout()', () => {
       component.onLogout();
 
       expect(authService.logout).toHaveBeenCalled();
