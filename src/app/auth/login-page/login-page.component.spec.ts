@@ -11,6 +11,7 @@ import { AuthModule } from '../auth.module';
 import { PokemonsModule } from '../../pokemons/pokemons.module';
 import { AuthService } from '../../core/auth/auth.service';
 import { User } from '../../core/auth/user.model';
+import { DebugElement } from '@angular/core';
 
 describe('LoginPageComponent', () => {
   let component: LoginPageComponent;
@@ -79,11 +80,25 @@ describe('LoginPageComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('intialization', () => {
+  describe('login form', () => {
     it('should initialize login form', () => {
       expect(component.loginForm).toBeTruthy();
     });
 
+    it('should contain username input', () => {
+      const usernameInputEl = fixture.debugElement.query(By.css('[formControlName="username"]'));
+
+      expect(usernameInputEl).toBeTruthy();
+    });
+
+    it('should contains password input', () => {
+      const passwordInputEl = fixture.debugElement.query(By.css('[formControlName="password"]'));
+
+      expect(passwordInputEl).toBeTruthy();
+    });
+  });
+
+  describe('intialization', () => {
     it('should redirect to next url if user has already logged in', fakeAsync(() => {
       (authService.isLoggedIn as jasmine.Spy).and.returnValue(true);
 

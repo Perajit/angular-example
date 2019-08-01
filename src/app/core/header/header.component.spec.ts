@@ -76,9 +76,13 @@ describe('HeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('#header title', () => { });
+  describe('header title', () => {
+    it('should exist', () => {
+      const headerTitleEl = fixture.debugElement.query(By.css('.title'));
+    });
+  });
 
-  describe('#header user menu', () => {
+  describe('header user menu', () => {
     let headerUserMenuEl: DebugElement;
 
     beforeEach(() => {
@@ -89,7 +93,7 @@ describe('HeaderComponent', () => {
       expect(headerUserMenuEl).toBeTruthy();
     });
 
-    it('should set currentUser input according to currentUser$', () => {
+    it('should change currentUser input according to currentUser$', () => {
       const mockCurrentUser$ = of(mockUser);
 
       authService.currentUser$ = mockCurrentUser$;
@@ -100,7 +104,7 @@ describe('HeaderComponent', () => {
       expect(headerUserMenu.currentUser).toEqual(mockUser);
     });
 
-    it('should listen to logout event with onLogout()', () => {
+    it('should call onLogout() when logout event is emitted', () => {
       spyOn(component, 'onLogout');
 
       const headerUserMenu: HeaderUserMenuComponent = headerUserMenuEl.componentInstance;

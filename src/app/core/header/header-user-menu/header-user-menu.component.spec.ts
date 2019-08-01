@@ -42,7 +42,7 @@ describe('HeaderUserMenuComponent', () => {
       fixture.detectChanges();
     });
 
-    describe('#user greeting', () => {
+    describe('user greeting', () => {
       let userGreetingEl: DebugElement;
 
       beforeEach(() => {
@@ -60,7 +60,7 @@ describe('HeaderUserMenuComponent', () => {
       });
     });
 
-    describe('#logout button', () => {
+    describe('logout button', () => {
       let logoutButtonEl: DebugElement;
 
       beforeEach(() => {

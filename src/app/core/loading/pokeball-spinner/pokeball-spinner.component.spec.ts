@@ -43,7 +43,7 @@ describe('PokeballSpinnerComponent', () => {
       expect(spinerLayerEl).toBeTruthy();
     });
 
-    describe('#ball element', () => {
+    describe('ball element', () => {
       let nativeEl: HTMLElement;
 
       beforeEach(() => {
@@ -61,7 +61,7 @@ describe('PokeballSpinnerComponent', () => {
       });
     });
 
-    describe('#core element', () => {
+    describe('core element', () => {
       let nativeEl: HTMLElement;
 
       beforeEach(() => {
