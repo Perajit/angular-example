@@ -53,7 +53,7 @@ describe('HeaderComponent', () => {
       providers: [
         {
           provide: AuthService,
-          useValue: mockAuthServiceFactory()
+          useFactory: mockAuthServiceFactory
         }
       ]
     }).compileComponents();

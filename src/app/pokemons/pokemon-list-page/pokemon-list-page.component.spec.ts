@@ -43,18 +43,11 @@ describe('PokemonListPageComponent', () => {
       providers: [
         {
           provide: PokemonService,
-          useValue: {
-            pokemons$: of([...mockPokemons]),
-            loadPokemons: jasmine.createSpy(),
-            removePokemon: jasmine.createSpy()
-          }
+          useFactory: mockPokemonServiceFactory
         },
         {
           provide: PokemonMasterdataService,
-          useValue: {
-            pokemonClasses$: of([...mockPokemonClasses]),
-            loadPokemonClasses: jasmine.createSpy()
-          }
+          useFactory: mockPokemonMasterdataServiceFactory
         }
       ]
     }).compileComponents();

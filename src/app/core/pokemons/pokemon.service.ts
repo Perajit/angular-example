@@ -41,7 +41,7 @@ export class PokemonService {
     const reqUrl = `${PokemonService.pokemonApiUrl}/list`;
 
     return this.http.get(reqUrl).pipe(
-      // takeLast(1),
+      takeLast(1),
       tap((pokemons: Pokemon[]) => {
         this.pokemons = pokemons;
       })

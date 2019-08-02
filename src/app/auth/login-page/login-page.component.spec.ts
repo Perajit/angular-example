@@ -11,7 +11,6 @@ import { AuthModule } from '../auth.module';
 import { PokemonsModule } from '../../pokemons/pokemons.module';
 import { AuthService } from '../../core/auth/auth.service';
 import { User } from '../../core/auth/user.model';
-import { DebugElement } from '@angular/core';
 
 describe('LoginPageComponent', () => {
   let component: LoginPageComponent;
@@ -48,7 +47,7 @@ describe('LoginPageComponent', () => {
       providers: [
         {
           provide: AuthService,
-          useValue: mockAuthServiceFactory()
+          useFactory: mockAuthServiceFactory
         },
         {
           provide: ActivatedRoute,

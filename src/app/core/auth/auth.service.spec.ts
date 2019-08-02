@@ -36,7 +36,7 @@ describe('AuthService', () => {
       providers: [
         {
           provide: 'Window',
-          useValue: mockWindowFactory()
+          useFactory: mockWindowFactory
         }
       ]
     });

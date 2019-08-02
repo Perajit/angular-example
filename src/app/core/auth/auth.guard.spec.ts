@@ -37,7 +37,7 @@ describe('AuthGuard', () => {
         AuthGuard,
         {
           provide: AuthService,
-          useValue: mockAuthServiceFactory()
+          useFactory: mockAuthServiceFactory
         }
       ]
     });
