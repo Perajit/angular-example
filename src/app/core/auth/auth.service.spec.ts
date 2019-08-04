@@ -73,26 +73,25 @@ describe('AuthService', () => {
     it('should store current user to session storage', () => {
       service.currentUser = mockUser;
 
-      const setItemSpy = mockWindow.sessionStorage.setItem as jasmine.Spy;
       const expectedValue = JSON.stringify(mockUser);
 
-      expect(setItemSpy).toHaveBeenCalledWith(AuthService.userStorageKey, expectedValue);
+      expect(mockWindow.sessionStorage.setItem).toHaveBeenCalledWith(AuthService.userStorageKey, expectedValue);
     });
   });
 
   describe('#currentUser$', () => {
     it('should emit current user when the value is set', () => {
-      const user$ = cold('a-b-c', {
+      const testUser$ = cold('a-b-c', {
         a: mockUser,
         b: null,
         c: { ...mockUser, username: 'another-mock-username' }
       });
 
-      user$.subscribe((user: User) => {
+      testUser$.subscribe((user: User) => {
         service.currentUser = user;
       });
 
-      expect(service.currentUser$).toBeObservable(user$);
+      expect(service.currentUser$).toBeObservable(testUser$);
     });
   });
 

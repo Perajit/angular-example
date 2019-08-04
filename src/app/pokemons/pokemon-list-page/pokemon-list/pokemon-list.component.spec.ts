@@ -1,9 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { PokemonListComponent } from './pokemon-list.component';
 import { PokemonsModule } from '../../pokemons.module';
+import { Pokemon } from 'src/app/core/pokemons/pokemon.model';
 import mockPokemons from '../../../core/pokemons/mock/mock-pokemons';
+import { PokemonClass } from 'src/app/core/pokemons/pokemon-class.model';
 
 describe('PokemonListComponent', () => {
   let component: PokemonListComponent;
@@ -34,6 +37,37 @@ describe('PokemonListComponent', () => {
     });
   });
 
+  describe('pokemon item', () => {
+    const selectedIndex = 1;
+    let selectedPokemon: Pokemon;
+    let selectedItemEl: DebugElement;
+
+    beforeEach(() => {
+      selectedPokemon = component.pokemons[selectedIndex];
+
+      const itemSelector = `.pokemon-list .item:nth-of-type(${selectedIndex + 1})`;
+      selectedItemEl = fixture.debugElement.query(By.css(itemSelector));
+    });
+
+    it('should call onClickEditPokemon() when edit-pokemon button is clicked', () => {
+      spyOn(component, 'onClickEditPokemon');
+
+      const editPokemonButtonEl = selectedItemEl.query(By.css('.edit-button'));
+      editPokemonButtonEl.triggerEventHandler('click', { });
+
+      expect(component.onClickEditPokemon).toHaveBeenCalledWith(selectedPokemon);
+    });
+
+    it('should call onClickDeletePokemon() when remove-pokemon button is clicked', () => {
+      spyOn(component, 'onClickDeletePokemon');
+
+      const deletePokemonButtonEl = selectedItemEl.query(By.css('.delete-button'));
+      deletePokemonButtonEl.triggerEventHandler('click', { });
+
+      expect(component.onClickDeletePokemon).toHaveBeenCalledWith(selectedPokemon);
+    });
+  });
+
   describe('pokemon list placeholder', () => {
     const isPlaceholderAvailable = () => {
       const placeholderItem = fixture.debugElement.query(By.css('.placeholder'));
@@ -55,7 +89,7 @@ describe('PokemonListComponent', () => {
     });
   });
 
-  describe('#shouldShowPokemon', () => {
+  describe('#shouldShowPlaceholder', () => {
     const testCases = [
       { pokemons: [], expectedResult: true },
       { pokemons: mockPokemons, expectedResult: false },
@@ -72,15 +106,49 @@ describe('PokemonListComponent', () => {
     });
   });
 
-  xdescribe('#onClickEditPokemon()', () => {
-    //
+  describe('#onClickEditPokemon()', () => {
+    it('should emit editPokemon event', () => {
+      spyOn(component.editPokemon, 'emit');
+
+      const editedPokemon = mockPokemons[0];
+      component.onClickEditPokemon(editedPokemon);
+
+      expect(component.editPokemon.emit).toHaveBeenCalledWith({ pokemon: editedPokemon });
+    });
   });
 
-  xdescribe('#onClickRemovePokemon()', () => {
-    //
+  describe('#onClickRemovePokemon()', () => {
+    it('should emit removePokemon event', () => {
+      spyOn(component.removePokemon, 'emit');
+
+      const removedPokemon = mockPokemons[0];
+      component.onClickDeletePokemon(removedPokemon);
+
+      expect(component.removePokemon.emit).toHaveBeenCalledWith({ pokemon: removedPokemon });
+    });
   });
 
-  xdescribe('#getItemBackgroundImageStyle()', () => {
-    //
+  describe('#getBackgroundImageStyle()', () => {
+    it('should return background-image style for pokemon item', () => {
+      component.pokemonClasses = [
+        {
+          name: 'Snorlax',
+          icon: 'snorlax-icon.png'
+        },
+        {
+          name: 'Pikachu',
+          icon: 'pikachu-icon.png'
+        }
+      ] as PokemonClass[];
+
+      const pokemon = {
+        name: 'My Pikachu',
+        class: 'Pikachu'
+      } as Pokemon;
+      const actualValue = component.getBackgroundImageStyle(pokemon);
+      const expectedValue = 'url(pikachu-icon.png)';
+
+      expect(actualValue).toEqual(expectedValue);
+    });
   });
 });

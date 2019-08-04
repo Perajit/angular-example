@@ -78,7 +78,7 @@ describe('AuthGuard', () => {
         isLoggedInSpy.and.returnValue(false);
       });
 
-      it('should redirect to login page with query param for next url', fakeAsync(() => {
+      it('should navigate to login page with query param for next url', fakeAsync(() => {
         router.navigate(['/pokemons']);
         tick();
 

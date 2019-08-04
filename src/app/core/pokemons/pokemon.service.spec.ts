@@ -36,17 +36,17 @@ describe('PokemonService', () => {
 
   describe('#pokemons$', () => {
     it('should emit pokemons when the value is set', () => {
-      const pokemon$ = cold('a-b-c', {
+      const testPokemon$ = cold('a-b-c', {
         a: mockPokemons.slice(0),
         b: mockPokemons.slice(1),
         c: mockPokemons.slice(2)
       });
 
-      pokemon$.subscribe((pokemons: Pokemon[]) => {
+      testPokemon$.subscribe((pokemons: Pokemon[]) => {
         service.pokemons = pokemons;
       });
 
-      expect(service.pokemons$).toBeObservable(pokemon$);
+      expect(service.pokemons$).toBeObservable(testPokemon$);
     });
   });
 

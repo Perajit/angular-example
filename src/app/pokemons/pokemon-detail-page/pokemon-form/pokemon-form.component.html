@@ -8,9 +8,9 @@
           name="name"
           formControlName="name"
           class="input"
-          [ngClass]="{ '-error': hasError('name') }"
+          [ngClass]="{ '-error': shouldShowError('name') }"
         />
-        <div *ngIf="hasError('name')" class="message -error">{{ getErrorMessage('name') }}</div>
+        <div *ngIf="shouldShowError('name')" class="message -error">{{ getErrorMessage('name') }}</div>
       </div>
     </div>
     <div class="row">
@@ -21,7 +21,7 @@
           name="class"
           formControlName="class"
           class="input"
-          [ngClass]="{ '-error': hasError('class') }"
+          [ngClass]="{ '-error': shouldShowError('class') }"
         >
           <option
             *ngFor="let pokemonClass of pokemonClasses"
@@ -30,7 +30,7 @@
             {{ pokemonClass.name }}
           </option>
         </select>
-        <div *ngIf="hasError('class')" class="message -error">{{ getErrorMessage('class') }}</div>
+        <div *ngIf="shouldShowError('class')" class="message -error">{{ getErrorMessage('class') }}</div>
       </div>
     </div>
     <div class="row">
@@ -43,9 +43,9 @@
           class="input"
           type="number"
           appNumericInput
-          [ngClass]="{ '-error': hasError('cp') }"
+          [ngClass]="{ '-error': shouldShowError('cp') }"
         />
-        <div *ngIf="hasError('cp')" class="message -error">{{ getErrorMessage('cp') }}</div>
+        <div *ngIf="shouldShowError('cp')" class="message -error">{{ getErrorMessage('cp') }}</div>
       </div>
     </div>
     <div class="row tools">

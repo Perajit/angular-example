@@ -11,6 +11,7 @@ import { AuthModule } from '../auth.module';
 import { PokemonsModule } from '../../pokemons/pokemons.module';
 import { AuthService } from '../../core/auth/auth.service';
 import { User } from '../../core/auth/user.model';
+import { DebugElement } from '@angular/core';
 
 describe('LoginPageComponent', () => {
   let component: LoginPageComponent;
@@ -78,26 +79,8 @@ describe('LoginPageComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('login form', () => {
-    it('should initialize login form', () => {
-      expect(component.loginForm).toBeTruthy();
-    });
-
-    it('should contain username input', () => {
-      const usernameInputEl = fixture.debugElement.query(By.css('[formControlName="username"]'));
-
-      expect(usernameInputEl).toBeTruthy();
-    });
-
-    it('should contains password input', () => {
-      const passwordInputEl = fixture.debugElement.query(By.css('[formControlName="password"]'));
-
-      expect(passwordInputEl).toBeTruthy();
-    });
-  });
-
   describe('intialization', () => {
-    it('should redirect to next url if user has already logged in', fakeAsync(() => {
+    it('should navigate to next url if user has already logged in', fakeAsync(() => {
       (authService.isLoggedIn as jasmine.Spy).and.returnValue(true);
 
       component.ngOnInit();
@@ -107,16 +90,41 @@ describe('LoginPageComponent', () => {
     }));
   });
 
-  describe('form submission', () => {
-    it('should call onSubmit()', () => {
+  describe('login form', () => {
+    let loginFormEl: DebugElement;
+
+    beforeEach(() => {
+      loginFormEl = fixture.debugElement.query(By.css('form'));
+    });
+
+    it('should exist', () => {
+      expect(component.loginForm).toBeTruthy();
+    });
+
+    it('should contain username input', () => {
+      const inputSelector = 'input[formControlName="username"]';
+      const usernameInputEl = loginFormEl.query(By.css(inputSelector));
+
+      expect(usernameInputEl).toBeTruthy();
+    });
+
+    it('should contains password input', () => {
+      const inputSelector = 'input[formControlName="password"]';
+      const passwordInputEl = loginFormEl.query(By.css(inputSelector));
+
+      expect(passwordInputEl).toBeTruthy();
+    });
+
+    it('should call onSubmit() when form is submitted', () => {
       spyOn(component, 'onSubmit');
 
-      const loginForm = fixture.debugElement.query(By.css('form'));
-      loginForm.triggerEventHandler('submit', { });
+      loginFormEl.triggerEventHandler('submit', { });
 
       expect(component.onSubmit).toHaveBeenCalled();
     });
+  });
 
+  describe('#onSubmit()', () => {
     describe('when login form is valid', () => {
       beforeEach(() => {
         component.loginForm.controls.username.setValue(mockUsername);
@@ -134,7 +142,7 @@ describe('LoginPageComponent', () => {
         expect(authService.login).toHaveBeenCalledWith(mockUsername, mockPassword);
       });
 
-      it('should redirect to next url after login', fakeAsync(() => {
+      it('should navigate to next url after login', fakeAsync(() => {
         component.onSubmit();
         tick();
 

@@ -28,11 +28,11 @@ export class PokemonListComponent implements OnInit {
     this.editPokemon.emit({ pokemon });
   }
 
-  onClickRemovePokemon(pokemon: Pokemon) {
+  onClickDeletePokemon(pokemon: Pokemon) {
     this.removePokemon.emit({ pokemon });
   }
 
-  getItemBackgroundImageStyle(pokemon: Pokemon) {
+  getBackgroundImageStyle(pokemon: Pokemon) {
     const icon = this.getPokemonIcon(pokemon);
     return `url(${icon})`;
   }

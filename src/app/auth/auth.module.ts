@@ -8,4 +8,4 @@ import { LoginPageComponent } from './login-page/login-page.component';
   declarations: [LoginPageComponent],
   imports: [SharedModule, AuthRoutingModule]
 })
-export class AuthModule {}
+export class AuthModule { }

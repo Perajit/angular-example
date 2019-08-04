@@ -29,16 +29,12 @@ export class PokemonFormComponent implements OnInit {
     return this.pokemonForm.invalid;
   }
 
-  get pokemonData() {
-    return this.pokemon || ({ } as PokemonInput);
-  }
-
   ngOnInit() {
-    const pokemonData = this.pokemonData;
+    const pokemonData = (this.pokemon || { }) as PokemonInput;
 
     this.pokemonForm = this.formBuilder.group({
       name: [pokemonData.name, [Validators.required, Validators.maxLength(50)]],
-      class: [pokemonData.class, [Validators.required, Validators.maxLength(50)]],
+      class: [pokemonData.class, [Validators.required]],
       cp: [pokemonData.cp, [Validators.required, Validators.min(10)]]
     });
   }
@@ -57,7 +53,7 @@ export class PokemonFormComponent implements OnInit {
     this.cancel.emit();
   }
 
-  hasError(fieldName: PokemonFormField) {
+  shouldShowError(fieldName: PokemonFormField) {
     const control = this.formControls[fieldName];
 
     if (!control) {
@@ -80,15 +76,11 @@ export class PokemonFormComponent implements OnInit {
     }
 
     if (errors.maxLength) {
-      return `This field must not be longer than ${errors.maxLength.requiredLegth}`;
+      return `This field must not be longer than ${errors.maxLength.requiredLength}`;
     }
 
     if (errors.min) {
       return `This field must not be less than ${errors.min.min}`;
-    }
-
-    if (errors.max) {
-      return `This field must not be greater than ${errors.max.max}`;
     }
   }
 

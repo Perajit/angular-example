@@ -2,9 +2,13 @@ import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core
 import { RouterTestingModule } from '@angular/router/testing';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
+import { cold } from 'jasmine-marbles';
 
 import { PokemonListPageComponent } from './pokemon-list-page.component';
+import { PokemonListComponent } from './pokemon-list/pokemon-list.component';
 import { PokemonDetailPageComponent } from '../pokemon-detail-page/pokemon-detail-page.component';
 import { PokemonsModule } from '../pokemons.module';
 import { PokemonService } from '../../core/pokemons/pokemon.service';
@@ -71,18 +75,104 @@ describe('PokemonListPageComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  xdescribe('#pokemons', () => { });
+  describe('pokemon list', () => {
+    let pokemonListEl: DebugElement;
+    let pokemonList: PokemonListComponent;
 
-  xdescribe('#pokemonClasses', () => { });
+    beforeEach(() => {
+      pokemonListEl = fixture.debugElement.query(By.css('app-pokemon-list'));
+      pokemonList = pokemonListEl.componentInstance;
+    });
+
+    it('should exist', () => {
+      expect(pokemonList).toBeTruthy();
+    });
+
+    it('should change pokemons input according to pokemons$', () => {
+      const testCurrentUser$ = of(mockPokemons);
+
+      spyOnProperty(component, 'pokemons$').and.returnValue(testCurrentUser$);
+      fixture.detectChanges();
+
+      expect(pokemonList.pokemons).toEqual(mockPokemons);
+    });
+
+    it('should call onEditPokemon() when editPokemon event is emitted', () => {
+      spyOn(component, 'onEditPokemon');
+
+      const editedPokemon = mockPokemons[0];
+      pokemonList.editPokemon.emit({ pokemon: editedPokemon });
+
+      expect(component.onEditPokemon).toHaveBeenCalledWith(editedPokemon);
+    });
+
+    it('should call onRemovePokemon() when removePokemon event is emitted', () => {
+      spyOn(component, 'onRemovePokemon');
+
+      const removedPokemon = mockPokemons[0];
+      pokemonList.removePokemon.emit({ pokemon: removedPokemon });
+
+      expect(component.onRemovePokemon).toHaveBeenCalledWith(removedPokemon);
+    });
+  });
+
+  describe('add-pokemon link', () => {
+    let addPokemonLinkEl: DebugElement;
+
+    beforeEach(() => {
+      addPokemonLinkEl = fixture.debugElement.query(By.css('a'));
+    });
+
+    it('should exist', () => {
+      expect(addPokemonLinkEl).toBeTruthy();
+    });
+
+    it('should link to add-pokemon page', () => {
+      const actualLinkHref = addPokemonLinkEl.nativeElement.getAttribute('href');
+      const expectedLinkHref = '/pokemons/new';
+
+      expect(actualLinkHref).toEqual(expectedLinkHref);
+    });
+  });
+
+  describe('#pokemons$', () => {
+    it('should equal pokemons$ from pokemon service', () => {
+      const testPokemons$ = cold('-a-b-c', {
+        a: mockPokemons.slice(0),
+        b: mockPokemons.slice(1),
+        c: mockPokemons.slice(0, 1)
+      });
+
+      pokemonService.pokemons$ = testPokemons$;
+      fixture.detectChanges();
+
+      expect(component.pokemons$).toBeObservable(testPokemons$);
+    });
+  });
+
+  describe('#pokemonClasses$', () => {
+    it('should equal pokemonClasses$ from pokemon masterdata service', () => {
+      const testPokemonClasses$ = cold('-a-b-c', {
+        a: mockPokemonClasses.slice(0),
+        b: mockPokemonClasses.slice(1),
+        c: mockPokemonClasses.slice(0, 1)
+      });
+
+      pokemonMasterdataService.pokemonClasses$ = testPokemonClasses$;
+      fixture.detectChanges();
+
+      expect(component.pokemonClasses$).toBeObservable(testPokemonClasses$);
+    });
+  });
 
   describe('#onEditPokemon()', () => {
-    it('should redirect to pokemon detail page', fakeAsync(() => {
-      const pokemon = mockPokemons[0];
+    it('should navigate to edit-pokemon page', fakeAsync(() => {
+      const editedPokemon = mockPokemons[0];
 
-      component.onEditPokemon(pokemon);
+      component.onEditPokemon(editedPokemon);
       tick();
 
-      expect(location.path()).toEqual(`/pokemons/detail/${pokemon.id}`);
+      expect(location.path()).toEqual(`/pokemons/detail/${editedPokemon.id}`);
     }));
   });
 

@@ -2,6 +2,8 @@ import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core
 import { RouterTestingModule } from '@angular/router/testing';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { cold } from 'jasmine-marbles';
 
@@ -13,8 +15,6 @@ import { AuthService } from '../auth/auth.service';
 import { User } from '../auth/user.model';
 import { PokemonListPageComponent } from 'src/app/pokemons/pokemon-list-page/pokemon-list-page.component';
 import { PokemonsModule } from 'src/app/pokemons/pokemons.module';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
 import { HeaderUserMenuComponent } from './header-user-menu/header-user-menu.component';
 
 describe('HeaderComponent', () => {
@@ -84,9 +84,11 @@ describe('HeaderComponent', () => {
 
   describe('header user menu', () => {
     let headerUserMenuEl: DebugElement;
+    let headerUserMenu: HeaderUserMenuComponent;
 
     beforeEach(() => {
       headerUserMenuEl = fixture.debugElement.query(By.css('app-header-user-menu'));
+      headerUserMenu = headerUserMenuEl.componentInstance;
     });
 
     it('should exist', () => {
@@ -94,12 +96,10 @@ describe('HeaderComponent', () => {
     });
 
     it('should change currentUser input according to currentUser$', () => {
-      const mockCurrentUser$ = of(mockUser);
+      const currentUser$ = of(mockUser);
 
-      authService.currentUser$ = mockCurrentUser$;
+      spyOnProperty(component, 'currentUser$').and.returnValue(currentUser$);
       fixture.detectChanges();
-
-      const headerUserMenu: HeaderUserMenuComponent = headerUserMenuEl.componentInstance;
 
       expect(headerUserMenu.currentUser).toEqual(mockUser);
     });
@@ -107,7 +107,6 @@ describe('HeaderComponent', () => {
     it('should call onLogout() when logout event is emitted', () => {
       spyOn(component, 'onLogout');
 
-      const headerUserMenu: HeaderUserMenuComponent = headerUserMenuEl.componentInstance;
       headerUserMenu.logout.emit();
 
       expect(component.onLogout).toHaveBeenCalled();
@@ -115,16 +114,16 @@ describe('HeaderComponent', () => {
   });
 
   describe('#currentUser$', () => {
-    it('should return currrentUser$ from auth service', () => {
-      const mockCurrentUser$ = cold('-a--b', {
+    it('should equal currrentUser$ from auth service', () => {
+      const testCurrentUser$ = cold('-a--b', {
         a: mockUser,
         b: null
       });
 
-      authService.currentUser$ = mockCurrentUser$;
+      authService.currentUser$ = testCurrentUser$;
       fixture.detectChanges();
 
-      expect(component.currentUser$).toBeObservable(mockCurrentUser$);
+      expect(component.currentUser$).toBeObservable(testCurrentUser$);
     });
   });
 
@@ -135,7 +134,7 @@ describe('HeaderComponent', () => {
       expect(authService.logout).toHaveBeenCalled();
     });
 
-    it('should redirect to login page after logout', fakeAsync(() => {
+    it('should navigate to login page after logout', fakeAsync(() => {
       component.onLogout();
       tick();
 
