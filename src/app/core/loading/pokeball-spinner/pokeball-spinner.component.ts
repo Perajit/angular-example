@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
-import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-pokeball-spinner',
@@ -12,14 +11,16 @@ export class PokeballSpinnerComponent implements OnInit {
   @Input() size = 80;
   @Input() color: string;
 
+  readonly coreOutlineRatio = 1 / 16;
+
   constructor() { }
 
-  get styleWithUnit() {
+  get ballSizeWithUnit() {
     return `${this.size}px`;
   }
 
-  get dividerWidth() {
-    return `${this.size / 16}px`;
+  get coreOutlineWithUnit() {
+    return `${this.size * this.coreOutlineRatio}px`;
   }
 
   ngOnInit() { }
