@@ -1,4 +1,4 @@
 <ng-container *ngIf="currentUser">
-  <span class="secondary-text">Welcome {{ currentUser?.username }}</span>
-  <a class="link" (click)="onClickLogout()">Logout</a>
+  <span class="user-greeting secondary-text">Welcome {{ currentUser.username }}</span>
+  <button class="logout-button button -transparent" (click)="onClickLogout()">Logout</button>
 </ng-container>
