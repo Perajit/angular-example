@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { mergeMap, tap } from 'rxjs/operators';
+import { tap, switchMap } from 'rxjs/operators';
 
-import { Pokemon } from './pokemon.model';
+import { Pokemon, PokemonInput } from './pokemon.model';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PokemonService {
+  static readonly pokemonApiUrl = `${environment.apiUrl}/pokemon`;
+
   pokemons$: Observable<Pokemon[]>;
-  pokemonsSubj: BehaviorSubject<Pokemon[]> = new BehaviorSubject(null);
-  readonly pokemonApiUrl = `${environment.apiUrl}/pokemon`;
+  private pokemonsSubj: BehaviorSubject<Pokemon[]> = new BehaviorSubject(null);
 
   constructor(
     private http: HttpClient
@@ -28,16 +29,6 @@ export class PokemonService {
     this.pokemonsSubj.next(pokemons);
   }
 
-  fetchPokemons() {
-    const reqUrl = `${this.pokemonApiUrl}/list`;
-
-    return this.http.get(reqUrl).pipe(
-      tap((pokemons: Pokemon[]) => {
-        this.pokemons = pokemons;
-      })
-    );
-  }
-
   loadPokemons() {
     const pokemons = this.pokemons;
 
@@ -46,24 +37,40 @@ export class PokemonService {
     }
   }
 
-  addPokemon(pokemonData: Partial<Pokemon>) {
-    const reqUrl = `${this.pokemonApiUrl}`;
-    const reqBody = pokemonData;
+  fetchPokemons() {
+    const reqUrl = `${PokemonService.pokemonApiUrl}/list`;
 
-    return this.http.post(reqUrl, reqBody).pipe(mergeMap(() => this.fetchPokemons()));
+    return this.http.get(reqUrl).pipe(
+      tap((pokemons: Pokemon[]) => {
+        this.pokemons = pokemons;
+      })
+    );
   }
 
-  removePokemon(pokemon: Pokemon) {
-    const reqUrl = `${this.pokemonApiUrl}/${pokemon.id}`;
+  addPokemon(pokemonInput: PokemonInput) {
+    const reqUrl = PokemonService.pokemonApiUrl;
+    const reqBody = pokemonInput;
 
-    return this.http.delete(reqUrl).pipe(mergeMap(() => this.fetchPokemons()));
+    return this.http.post(reqUrl, reqBody).pipe(
+      switchMap(() => this.fetchPokemons())
+    );
   }
 
-  updatePokemon(pokemon: Pokemon, pokemonData: Partial<Pokemon>) {
-    const reqUrl = `${this.pokemonApiUrl}/${pokemon.id}`;
-    const reqBody = pokemonData;
+  removePokemon(pokemonId: number) {
+    const reqUrl = `${PokemonService.pokemonApiUrl}/${pokemonId}`;
 
-    return this.http.put(reqUrl, reqBody).pipe(mergeMap(() => this.fetchPokemons()));
+    return this.http.delete(reqUrl).pipe(
+      switchMap(() => this.fetchPokemons())
+    );
+  }
+
+  updatePokemon(pokemonId: number, pokemonInput: PokemonInput) {
+    const reqUrl = `${PokemonService.pokemonApiUrl}/${pokemonId}`;
+    const reqBody = pokemonInput;
+
+    return this.http.put(reqUrl, reqBody).pipe(
+      switchMap(() => this.fetchPokemons())
+    );
   }
 
   getPokemonById(id: number) {

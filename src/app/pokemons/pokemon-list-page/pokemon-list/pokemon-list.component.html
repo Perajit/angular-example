@@ -1,16 +1,20 @@
 <ul class="pokemon-list">
   <li class="item" *ngFor="let pokemon of pokemons">
-    <div class="card" [ngStyle]="{ backgroundImage: getItemBackgroundImageStyle(pokemon) }">
-      <div class="info-holder">
-        <div class="primary-text">{{ pokemon.name }}</div>
-        <div class="secondary-text">{{ pokemon.class }}</div>
-        <div class="secondary-text">CP{{ pokemon.cp }}</div>
-      </div>
-      <div class="tools-holder">
-        <button (click)="onClickEditPokemon(pokemon)" class="button -transparent">Edit</button>
-        <button (click)="onClickRemovePokemon(pokemon)" class="button -transparent">Delete</button>
-      </div>
-    </div>
+    <ng-container *ngTemplateOutlet="pokemomItem; context : { pokemon: pokemon }"></ng-container>
   </li>
   <li *ngIf="shouldShowPlaceholder" class="placeholder">You have no pokemon.</li>
 </ul>
+
+<ng-template #pokemomItem let-pokemon="pokemon">
+  <div class="card" [ngStyle]="{ backgroundImage: getBackgroundImageStyle(pokemon) }">
+    <div class="info-holder">
+      <div class="primary-text">{{ pokemon.name }}</div>
+      <div class="secondary-text">{{ pokemon.class }}</div>
+      <div class="secondary-text">CP{{ pokemon.cp }}</div>
+    </div>
+    <div class="tools-holder">
+      <button (click)="onClickEditPokemon(pokemon)" class="edit-button button -transparent">Edit</button>
+      <button (click)="onClickDeletePokemon(pokemon)" class="delete-button button -transparent">Delete</button>
+    </div>
+  </div>
+</ng-template>

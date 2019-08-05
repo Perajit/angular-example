@@ -10,9 +10,9 @@
           placeholder="Username"
           formControlName="username"
           class="input"
-          [ngClass]="{ '-error': hasError('username') }"
+          [ngClass]="{ '-error': shouldShowError('username') }"
         />
-        <div *ngIf="hasError('username')" class="message -error">{{ getErrorMessage('username') }}</div>
+        <div *ngIf="shouldShowError('username')" class="message -error">{{ getErrorMessage('username') }}</div>
       </div>
     </div>
     <div class="row">
@@ -26,9 +26,9 @@
           formControlName="password"
           autocomplete="on"
           class="input"
-          [ngClass]="{ '-error': hasError('password') }"
+          [ngClass]="{ '-error': shouldShowError('password') }"
         />
-        <div *ngIf="hasError('password')" class="message -error">{{ getErrorMessage('password') }}</div>
+        <div *ngIf="shouldShowError('password')" class="message -error">{{ getErrorMessage('password') }}</div>
       </div>
     </div>
     <div class="row tools">

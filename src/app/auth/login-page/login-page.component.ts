@@ -22,14 +22,6 @@ export class LoginPageComponent implements OnInit {
     private authService: AuthService
   ) { }
 
-  get formControls() {
-    return this.loginForm.controls;
-  }
-
-  get isFormInvalid() {
-    return this.loginForm.invalid;
-  }
-
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -40,43 +32,36 @@ export class LoginPageComponent implements OnInit {
     const isLoggedIn = this.authService.isLoggedIn();
 
     if (isLoggedIn) {
-      this.navigateToReturnUrl();
+      this.navigateToNextUrl();
       return;
     }
   }
 
   onSubmit() {
-    if (this.isFormInvalid) {
-      this.markAllFieldAsDirty();
+    this.markAllFieldAsDirty();
+
+    if (this.loginForm.invalid) {
       return;
     }
 
-    const { username, password } = this.formControls;
+    const { username, password } = this.loginForm.controls;
     this.authService.login(username.value, password.value).subscribe(() => {
-      this.navigateToReturnUrl();
+      this.navigateToNextUrl();
     });
   }
 
-  navigateToReturnUrl() {
-    this.router.navigate([`/${this.nextUrl}`]);
-  }
-
-  hasError(fieldName: LoginFormField) {
-    const control = this.formControls[fieldName];
-
-    if (!control) {
-      return;
-    }
+  shouldShowError(fieldName: LoginFormField) {
+    const control = this.loginForm.controls[fieldName];
 
     return control.dirty && control.invalid;
   }
 
   getErrorMessage(fieldName: LoginFormField) {
-    const control = this.formControls[fieldName];
+    const control = this.loginForm.controls[fieldName];
     const errors = control ? control.errors : null;
 
     if (!errors) {
-      return;
+      return undefined;
     }
 
     if (errors.required) {
@@ -84,8 +69,12 @@ export class LoginPageComponent implements OnInit {
     }
   }
 
+  private navigateToNextUrl() {
+    this.router.navigate([`/${this.nextUrl}`]);
+  }
+
   private markAllFieldAsDirty() {
-    const formControls = this.formControls;
+    const formControls = this.loginForm.controls;
     const fieldNames = Object.keys(formControls);
 
     fieldNames.forEach((fieldName) => {

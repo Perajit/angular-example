@@ -35,6 +35,6 @@ export class PokemonListPageComponent implements OnInit {
   }
 
   onRemovePokemon(pokemon: Pokemon) {
-    this.pokemonService.removePokemon(pokemon).subscribe();
+    this.pokemonService.removePokemon(pokemon.id).subscribe();
   }
 }

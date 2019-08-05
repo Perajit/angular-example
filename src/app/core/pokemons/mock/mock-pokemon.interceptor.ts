@@ -3,7 +3,7 @@ import { HttpRequest, HttpHandler, HttpResponse, HttpInterceptor } from '@angula
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-import { Pokemon } from '../pokemon.model';
+import { Pokemon, PokemonInput } from '../pokemon.model';
 import mockPokemons from './mock-pokemons';
 
 @Injectable({
@@ -43,7 +43,7 @@ export class MockPokemonInterceptor implements HttpInterceptor {
     );
   }
 
-  private interceptAddPokemon(reqBody: Partial<Pokemon>) {
+  private interceptAddPokemon(reqBody: PokemonInput) {
     const pokemons = this.pokemons || [];
     const pokomonIds = pokemons.map((pokemon) => pokemon.id);
     const maxId = Math.max(...pokomonIds);
@@ -59,7 +59,7 @@ export class MockPokemonInterceptor implements HttpInterceptor {
     );
   }
 
-  private interceptUpdatePokemon(id: number, reqBody: Partial<Pokemon>) {
+  private interceptUpdatePokemon(id: number, reqBody: PokemonInput) {
     const pokemons = this.pokemons;
     const index = this.getIndexOfPokemon(id);
     const pokemon = pokemons[index];

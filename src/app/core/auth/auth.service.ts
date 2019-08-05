@@ -10,18 +10,17 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-  currentUser$: Observable<User>;
-  readonly authApiUrl = `${environment.apiUrl}/auth`;
-  readonly userStorageKey = 'ngexample_user';
+  static readonly authApiUrl = `${environment.apiUrl}/auth`;
+  static readonly userStorageKey = 'ngexample_user';
 
-  private currentUserSubj: BehaviorSubject<User> = new BehaviorSubject(null);
+  currentUser$: Observable<User>;
+  private currentUserSubj: BehaviorSubject<User> = new BehaviorSubject(this.getStoredUser());
 
   constructor(
     private http: HttpClient,
     @Inject('Window') private window: Window
   ) {
     this.currentUser$ = this.currentUserSubj.asObservable();
-    this.currentUser = this.getStoredUser();
   }
 
   get currentUser() {
@@ -43,7 +42,7 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<User> {
-    const reqUrl = `${this.authApiUrl}/login`;
+    const reqUrl = `${AuthService.authApiUrl}/login`;
     const reqBody = { username, password };
     const reqOptions = {
       headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
@@ -57,7 +56,7 @@ export class AuthService {
   }
 
   logout() {
-    const reqUrl = `${this.authApiUrl}/logout`;
+    const reqUrl = `${AuthService.authApiUrl}/logout`;
     const reqBody = null;
 
     return this.http.post(reqUrl, reqBody).pipe(
@@ -69,17 +68,17 @@ export class AuthService {
   }
 
   private getStoredUser() {
-    const storedValue = this.window.sessionStorage.getItem(this.userStorageKey);
+    const storedValue = this.window.sessionStorage.getItem(AuthService.userStorageKey);
 
-    return storedValue ? JSON.parse(storedValue) : null;
+    return storedValue ? JSON.parse(storedValue) : undefined;
   }
 
   private setStoredUser(user: User) {
     if (user) {
       const storedValue = JSON.stringify(user);
-      this.window.sessionStorage.setItem(this.userStorageKey, storedValue);
+      this.window.sessionStorage.setItem(AuthService.userStorageKey, storedValue);
     } else {
-      this.window.sessionStorage.removeItem(this.userStorageKey);
+      this.window.sessionStorage.removeItem(AuthService.userStorageKey);
     }
   }
 }

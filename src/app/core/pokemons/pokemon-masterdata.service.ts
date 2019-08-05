@@ -10,9 +10,10 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class PokemonMasterdataService {
+  static readonly pokemonMasterdataApiUrl = `${environment.apiUrl}/masterdata/pokemon`;
+
   pokemonClasses$: Observable<PokemonClass[]>;
-  pokemonClassesSubj: BehaviorSubject<PokemonClass[]> = new BehaviorSubject(null);
-  readonly pokemonMasterdataApiUrl = `${environment.apiUrl}/masterdata/pokemon`;
+  private pokemonClassesSubj: BehaviorSubject<PokemonClass[]> = new BehaviorSubject(null);
 
   constructor(
     private http: HttpClient
@@ -28,21 +29,21 @@ export class PokemonMasterdataService {
     this.pokemonClassesSubj.next(pokemonSpecies);
   }
 
-  fetchPokemonClasses(): Observable<PokemonClass[]> {
-    const reqUrl = `${this.pokemonMasterdataApiUrl}/classes`;
-
-    return this.http.get(reqUrl).pipe(
-      tap((pokemonClasses: PokemonClass[]) => {
-        this.pokemonClasses = pokemonClasses;
-      })
-    );
-  }
-
   loadPokemonClasses() {
     const pokemonClasses = this.pokemonClasses;
 
     if (!pokemonClasses) {
       this.fetchPokemonClasses().subscribe();
     }
+  }
+
+  fetchPokemonClasses(): Observable<PokemonClass[]> {
+    const reqUrl = `${PokemonMasterdataService.pokemonMasterdataApiUrl}/classes`;
+
+    return this.http.get(reqUrl).pipe(
+      tap((pokemonClasses: PokemonClass[]) => {
+        this.pokemonClasses = pokemonClasses;
+      })
+    );
   }
 }
