@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, takeLast } from 'rxjs/operators';
 
 import { PokemonClass } from './pokemon-class.model';
 import { environment } from 'src/environments/environment';
@@ -41,6 +41,7 @@ export class PokemonMasterdataService {
     const reqUrl = `${PokemonMasterdataService.pokemonMasterdataApiUrl}/classes`;
 
     return this.http.get(reqUrl).pipe(
+      takeLast(1),
       tap((pokemonClasses: PokemonClass[]) => {
         this.pokemonClasses = pokemonClasses;
       })
